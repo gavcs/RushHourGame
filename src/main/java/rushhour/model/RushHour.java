@@ -3,7 +3,9 @@ package rushhour.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class RushHour {
@@ -37,6 +39,33 @@ public class RushHour {
     }
 
     public void moveVehicle(Move move) throws RushHourException{
-        
+        char key = move.getSymbol();
+        Vehicle carmove = cars.get(key);
+        carmove.move(move.getDirect());
     }
+
+    public boolean gameOver(){
+        Vehicle car = cars.get('R');
+        Position front = car.getFront();
+        Position back = car.getBack();
+        if(front.equals(EXIT_POS) || back.equals(EXIT_POS)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Collection<Move> getPossibleMoves(){
+        Collection<Move> posMoves = new LinkedList<>();
+        for(char key: cars.keySet()){
+            Vehicle a = cars.get(key);
+            Position front = a.getFront();
+            Position back = a.getBack();
+            if(front.getCol() < BOARD_DIM){
+
+            }
+        }
+    }
+
+
 }
