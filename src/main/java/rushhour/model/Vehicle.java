@@ -11,9 +11,19 @@ public class Vehicle {
         this.front = front;
     }
 
-    public char getSymbol(){return this.symbol;}
-    public Position getBack(){return this.back;}
-    public Position getFront(){return this.front;}
+   
+
+    public char getSymbol(){
+        return this.symbol;
+    }
+    
+    public Position getBack(){
+        return this.back;
+    }
+
+    public Position getFront(){
+        return this.front;
+    }
 
     public void move(Direction dir) throws RushHourException{
 
