@@ -53,15 +53,9 @@ public class RushHour {
     }
 
     public boolean gameOver(){
-        //getting the red car, the one that needs to leave
         Vehicle car = cars.get('R');
-
-        //getting the positions of the car
         Position front = car.getFront();
-        Position back = car.getBack();
-
-        //in the case that either the front or back are in the EXIT_POS, the game is over, otherwise it isn't
-        if(front.equals(EXIT_POS) || back.equals(EXIT_POS)){
+        if(front.equals(EXIT_POS)){
             return true;
         } else {
             return false;
