@@ -13,6 +13,7 @@ public class RushHour {
     public static final char RED_SYMBOL = 'R';
     public static final char EMPTY_SYMBOL = '-';
     public static final Position EXIT_POS = new Position (2, 5);
+    private int moveCount;
     
     /*
      * creating a map with the vehicles will allow for the moveVehicle method to move the car
@@ -36,18 +37,30 @@ public class RushHour {
             this.cars.put(details[0].charAt(0), new Vehicle(details[0].charAt(0), back, front));
         }
         reader.close();
+        this.moveCount = 0;
     }
 
     public void moveVehicle(Move move) throws RushHourException{
+        //get the car using the character in Move move as the key
         char key = move.getSymbol();
         Vehicle carmove = cars.get(key);
+
+        //move it using Vehicle.move()
         carmove.move(move.getDirect());
+
+        //must add to the moveCount
+        this.moveCount++;
     }
 
     public boolean gameOver(){
+        //getting the red car, the one that needs to leave
         Vehicle car = cars.get('R');
+
+        //getting the positions of the car
         Position front = car.getFront();
         Position back = car.getBack();
+
+        //in the case that either the front or back are in the EXIT_POS, the game is over, otherwise it isn't
         if(front.equals(EXIT_POS) || back.equals(EXIT_POS)){
             return true;
         } else {
@@ -56,16 +69,52 @@ public class RushHour {
     }
 
     public Collection<Move> getPossibleMoves(){
+        //create a Collection to return, and iterate through the existing cars
         Collection<Move> posMoves = new LinkedList<>();
         for(char key: cars.keySet()){
+
+            //get the Vehicle and create Position variables to work with
             Vehicle a = cars.get(key);
             Position front = a.getFront();
             Position back = a.getBack();
-            if(front.getCol() < BOARD_DIM){
+            //checking if the car can move left or right, but checking which way the car is facing first is important 
+            if(front.getCol() > back.getCol()){
+                if(front.getCol() < BOARD_DIM){
+                    posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                }
+                if(back.getCol() > 0){
+                    posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+                }
+            } else {
+                if(back.getCol() < BOARD_DIM){
+                    posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                }
+                if(front.getCol() > 0){
+                    posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+                }
+            }
 
+            //now looking to see if the car could move up or down, but also need to check where it's facing again
+            if(front.getRow() > back.getRow()){
+                if(front.getRow() < BOARD_DIM){
+                    posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                }
+                if(back.getRow() > 0){
+                    posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                }
+            } else {
+                if(back.getRow() < BOARD_DIM){
+                    posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                }
+                if(front.getRow() > 0){
+                    posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                }
             }
         }
+        return posMoves;
     }
 
-
+    public int getMoveCount(){
+        return this.moveCount;
+    }
 }
