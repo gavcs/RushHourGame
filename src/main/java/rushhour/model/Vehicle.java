@@ -15,7 +15,7 @@ public class Vehicle {
     public Position getBack(){return this.back;}
     public Position getFront(){return this.front;}
 
-    public void move(Direction dir){
-        
+    public void move(Direction dir) throws RushHourException{
+
     }
 }
