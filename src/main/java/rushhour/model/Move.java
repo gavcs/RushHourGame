@@ -2,10 +2,10 @@ package rushhour.model;
 
 public class Move {
     private char symbol;
-    private Direction direct;
+    private Direction dir;
 
-    public Move (char symbol, Direction direct) {
-        this.direct = direct;
+    public Move (char symbol, Direction dir) {
+        this.dir = dir;
         this.symbol = symbol;
     }
 
@@ -14,6 +14,6 @@ public class Move {
     }
 
     public Direction getDirect () {
-        return this.direct;
+        return this.dir;
     }
 }
