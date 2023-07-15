@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class RushHour {
     public static final int BOARD_DIM = 6;
@@ -24,10 +27,16 @@ public class RushHour {
     private Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
-        FileReader read = new FileReader(filename);
+        FileReader read = new FileReader("data/" + filename);
         BufferedReader reader = new BufferedReader(read);
         String[] numCars = filename.split("_");
-        int n = Integer.parseInt(numCars[0]);
+        int n;
+        if(numCars[0].charAt(0) == 0){
+            String a = "" + numCars[0].charAt(1);
+            n = Integer.parseInt(a);
+        } else {
+            n = Integer.parseInt(numCars[0]);
+        }
         this.cars = new HashMap<>();
         for(int i = 0; i < n; i++){
             String car = reader.readLine();
@@ -110,5 +119,75 @@ public class RushHour {
 
     public int getMoveCount(){
         return this.moveCount;
+    }
+
+    //this helper function will create a list of strings in a format like 12R, where 1 is the row, 2 is the column, and R is the Symbol
+    private List<String> carLocations(){
+        Set<Character> ca = cars.keySet();
+        LinkedList<Vehicle> l = new LinkedList<>();
+        for(Character c: ca){
+            l.add(cars.get(c));
+        }
+        LinkedList<String> list = new LinkedList<>();
+        for(Vehicle a: l){
+            Position front = a.getFront();
+            Position back = a.getBack();
+            if(front.getRow() == back.getRow()){
+                if(front.getCol() > back.getCol()){
+                    for(int i = front.getCol(); i >= back.getCol(); i--){
+                        list.add(Integer.toString(front.getRow()) + Integer.toString(i) + a.getSymbol());
+                    }
+                } else {
+                    for(int i = back.getCol(); i >= front.getCol(); i--){
+                        list.add(Integer.toString(front.getRow()) + Integer.toString(i) + a.getSymbol());
+                    }
+                }
+            } else {
+                if(front.getRow() > back.getRow()){
+                    for(int i = front.getCol(); i >= back.getCol(); i--){
+                        list.add(Integer.toString(front.getCol()) + Integer.toString(i) + a.getSymbol());
+                    }
+                } else {
+                    for(int i = back.getCol(); i >= front.getCol(); i--){
+                        list.add(Integer.toString(front.getCol()) + Integer.toString(i) + a.getSymbol());
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public String toString(){
+        List<String> locations = this.carLocations();
+        String board = "";
+        for(int row = 0; row < BOARD_DIM; row++){
+            for(int col = 0; col < BOARD_DIM; col++){
+                boolean carfound = false;
+                for(char a: cars.keySet()){
+                    if(locations.contains(Integer.toString(row) + Integer.toString(col) + a)){
+                        board += a;
+                        carfound = true;
+                        break;
+                    }
+                }
+                if(!carfound){
+                    board += EMPTY_SYMBOL;
+                }
+            }
+            if(row + 1 < BOARD_DIM){
+                board += "\n";
+            }
+        }
+        return board;
+    }
+
+    public static void main(String[] args){
+        try{
+            RushHour rh = new RushHour("03_00.csv");
+            System.out.println(rh);
+        } catch(IOException e){
+            System.out.println("IOException");
+        }
     }
 }
