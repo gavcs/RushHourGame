@@ -17,6 +17,7 @@ public class RushHour {
     public static final char EMPTY_SYMBOL = '-';
     public static final Position EXIT_POS = new Position (2, 5);
     private int moveCount;
+    private String filename;
     
     /*
      * creating a map with the vehicles will allow for the moveVehicle method to move the car
@@ -27,6 +28,7 @@ public class RushHour {
     private Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
+        this.filename = filename;
         FileReader read = new FileReader("data/" + filename);
         BufferedReader reader = new BufferedReader(read);
         String[] numCars = filename.split("_");
@@ -122,6 +124,7 @@ public class RushHour {
     }
 
     //this helper function will create a list of strings in a format like 12R, where 1 is the row, 2 is the column, and R is the Symbol
+    /*
     private List<String> carLocations(){
         Set<Character> ca = cars.keySet();
         LinkedList<Vehicle> l = new LinkedList<>();
@@ -156,10 +159,28 @@ public class RushHour {
         }
         return list;
     }
+    */
+
+    private List<String> carLocations(){
+        List<String> list = new LinkedList<>();
+        try{
+            FileReader read = new FileReader("data/" + filename);
+            BufferedReader reader = new BufferedReader(read);
+            String line = reader.readLine();
+            while(line != ""){
+                String[] helper = line.split(",");
+
+            }
+            reader.close();
+        } catch (IOException e){
+            System.out.println("IOException 2");
+        }
+    }
 
     @Override
     public String toString(){
         List<String> locations = this.carLocations();
+        
         String board = "";
         for(int row = 0; row < BOARD_DIM; row++){
             for(int col = 0; col < BOARD_DIM; col++){
