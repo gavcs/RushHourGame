@@ -119,68 +119,11 @@ public class RushHour {
         return this.moveCount;
     }
 
-    /*
-    //this helper function will create a list of strings in a format like 12R, where 1 is the row, 2 is the column, and R is the Symbol
-    private List<String> carLocations(){
-        Set<Character> ca = cars.keySet();
-        LinkedList<Vehicle> l = new LinkedList<>();
-        for(Character c: ca){
-            l.add(cars.get(c));
-        }
-        LinkedList<String> list = new LinkedList<>();
-        for(Vehicle a: l){
-            Position front = a.getFront();
-            Position back = a.getBack();
-            if(front.getRow() == back.getRow()){
-                if(front.getCol() > back.getCol()){
-                    for(int i = front.getCol(); i >= back.getCol(); i--){
-                        list.add(Integer.toString(front.getRow()) + Integer.toString(i) + a.getSymbol());
-                    }
-                } else {
-                    for(int i = back.getCol(); i >= front.getCol(); i--){
-                        list.add(Integer.toString(front.getRow()) + Integer.toString(i) + a.getSymbol());
-                    }
-                }
-            } else {
-                if(front.getRow() > back.getRow()){
-                    for(int i = front.getCol(); i >= back.getCol(); i--){
-                        list.add(Integer.toString(front.getCol()) + Integer.toString(i) + a.getSymbol());
-                    }
-                } else {
-                    for(int i = back.getCol(); i >= front.getCol(); i--){
-                        list.add(Integer.toString(front.getCol()) + Integer.toString(i) + a.getSymbol());
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
-    private List<String> carLocations(){
-        List<String> list = new LinkedList<>();
-        try{
-            FileReader read = new FileReader("data/" + filename);
-            BufferedReader reader = new BufferedReader(read);
-            String line = reader.readLine();
-            while(line != ""){
-                String[] helper = line.split(",");
-
-            }
-            reader.close();
-        } catch (IOException e){
-            System.out.println("IOException 2");
-        }
-    }
-    */
-
-
-    // Idea for carLocations is to find the locations of all existing cars and to map any row-column locations that should be considered
-    // To do this, I need to find the front and back of every car. For a given car, if the front and back rows are equal, it would be
-    // horizontal. If the columns are equal, then it's vertical. The key of the Map is going to be the rows, and the elements are going to be
-    // a List of columns that are being taken up by a car. If the difference between the two non-equal factors (meaning if row is
-    // equal then we're looking at column) is greater than one, then all values in between must also be added (to account for cars greater
-    // than length 2). Return that, and create a string of a 6x6 board, looking at each (row,col) to see if a car is taking up that space.
-
+    // The idea for carLocations() is to create a map with the keys being the rows, and the elements being
+    // another map with the keys as the columns that contain cars in those rows. Those are important values, but
+    // in order for toString() to work, we also need the character associated with the row-column value. In
+    // order to do this, the element in the map contained in the map is the character (or the getSymbol())
+    // value of the car in that row/column.
     private Map<Integer, Map<Integer, Character>> carLocations(){
         Map<Integer, Map<Integer, Character>> locations = new HashMap<>();
         Set<Character> cs = cars.keySet();
@@ -228,7 +171,9 @@ public class RushHour {
         return locations;
     }
 
-
+    // The toString() utilizes the Map created in carLocations() to check every row-column to see
+    // if the map contains them. If it does, it will get the character at that location, and add it
+    // to the String that will eventually be returned.
     @Override
     public String toString(){
         Map<Integer, Map<Integer, Character>> locations = this.carLocations();
