@@ -186,6 +186,7 @@ public class RushHour {
         Set<Character> cs = cars.keySet();
         for(char ch: cs){
             Vehicle c = cars.get(ch);
+            System.out.println(c);
             int frontr = c.getFront().getRow();
             int frontc = c.getFront().getCol();
             int backr = c.getBack().getRow();
@@ -259,7 +260,14 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            System.out.println(rh);
+            Map<Integer, Map<Integer, Character>> m = rh.carLocations();
+            Set<Integer> s1 = m.keySet();
+            for(int r: s1){
+                Set<Integer> s2 = m.get(r).keySet();
+                for(int c: s2){
+                    System.out.println(m.get(r).get(c) + ": (" + r + "," + c + ")");
+                }
+            }
         } catch(IOException e){
             System.out.println("IOException");
         }
