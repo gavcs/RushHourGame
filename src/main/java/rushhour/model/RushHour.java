@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 public class RushHour {
@@ -17,7 +15,6 @@ public class RushHour {
     public static final char EMPTY_SYMBOL = '-';
     public static final Position EXIT_POS = new Position (2, 5);
     private int moveCount;
-    private String filename;
     
     /*
      * creating a map with the vehicles will allow for the moveVehicle method to move the car
@@ -28,7 +25,6 @@ public class RushHour {
     private Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
-        this.filename = filename;
         FileReader read = new FileReader("data/" + filename);
         BufferedReader reader = new BufferedReader(read);
         String[] numCars = filename.split("_");
@@ -185,8 +181,8 @@ public class RushHour {
     // equal then we're looking at column) is greater than one, then all values in between must also be added (to account for cars greater
     // than length 2). Return that, and create a string of a 6x6 board, looking at each (row,col) to see if a car is taking up that space.
 
-    private Map<Integer, List<Integer>> carLocations(){
-        Map<Integer, List<Integer>> locations = new HashMap<>();
+    private Map<Integer, Map<Integer, Character>> carLocations(){
+        Map<Integer, Map<Integer, Character>> locations = new HashMap<>();
         Set<Character> cs = cars.keySet();
         for(char ch: cs){
             Vehicle c = cars.get(ch);
@@ -196,34 +192,34 @@ public class RushHour {
             int backc = c.getBack().getCol();
             if(frontr == backr){
                 if(!locations.containsKey(frontr)){
-                    locations.put(frontr, new LinkedList<>());
+                    locations.put(frontr, new HashMap<>());
                 }
                 if(frontc > backc){
                     for(int i = backc; i <= frontc; i++){
-                        locations.get(frontr).add(i);
+                        locations.get(frontr).put(i, c.getSymbol());
                     }
                 } else {
                     for(int i = frontc; i <= backc; i++){
-                        locations.get(frontr).add(i);
+                        locations.get(frontr).put(i, c.getSymbol());
                     }
                 }
             } else {
                 if(frontr > backr){
                     for(int i = backr; i <= frontr; i++){
                         if(!locations.containsKey(i)){
-                            locations.put(i, new LinkedList<>());
-                            locations.get(i).add(backc);
+                            locations.put(i, new HashMap<>());
+                            locations.get(i).put(i, c.getSymbol());
                         } else {
-                            locations.get(i).add(backc);
+                            locations.get(i).put(i, c.getSymbol());
                         }
                     }
                 } else {
                     for(int i = frontr; i <= backr; i++){
                         if(!locations.containsKey(i)){
-                            locations.put(i, new LinkedList<>());
-                            locations.get(i).add(backc);
+                            locations.put(i, new HashMap<>());
+                            locations.get(i).put(backc, c.getSymbol());
                         } else {
-                            locations.get(i).add(backc);
+                            locations.get(i).put(backc, c.getSymbol());
                         }
                     }
                 }
@@ -235,43 +231,35 @@ public class RushHour {
 
     @Override
     public String toString(){
-        List<String> locations = this.carLocations();
+        Map<Integer, Map<Integer, Character>> locations = this.carLocations();
         
         String board = "";
         for(int row = 0; row < BOARD_DIM; row++){
+            boolean containsRow = false;
+            if(locations.keySet().contains(row)){
+                containsRow = true;
+            }
             for(int col = 0; col < BOARD_DIM; col++){
-                boolean carfound = false;
-                for(char a: cars.keySet()){
-                    if(locations.contains(Integer.toString(row) + Integer.toString(col) + a)){
-                        board += a;
-                        carfound = true;
-                        break;
+                if(containsRow == false){
+                    board += "-";
+                } else {
+                    if(locations.get(row).containsKey(col)){
+                        board += locations.get(row).get(col);
+                    } else {
+                        board += "-";
                     }
                 }
-                if(!carfound){
-                    board += EMPTY_SYMBOL;
-                }
             }
-            if(row + 1 < BOARD_DIM){
-                board += "\n";
-            }
+            board += "\n";
         }
+
         return board;
     }
 
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            Map<Integer, List<Integer>> l = rh.carLocations();
-            Set<Integer> i = l.keySet();
-            for(int ii: i){
-                System.out.println(ii + ":");
-                List<Integer> ints = l.get(ii);
-                for(int iii: ints){
-                    System.out.print(iii + ",");
-                }
-                System.out.print("\n");
-            }
+            System.out.println(rh);
         } catch(IOException e){
             System.out.println("IOException");
         }
