@@ -159,7 +159,7 @@ public class RushHour {
         }
         return list;
     }
-    */
+
 
     private List<String> carLocations(){
         List<String> list = new LinkedList<>();
@@ -176,6 +176,16 @@ public class RushHour {
             System.out.println("IOException 2");
         }
     }
+    */
+
+
+    // Idea for carLocations is to find the locations of all existing cars and to map any row-column locations that should be considered
+    // To do this, I need to find the front and back of every car. For a given car, if the front and back rows are equal, it would be
+    // horizontal. If the columns are equal, then it's vertical. The key of the Map is going to be the rows, and the elements are going to be
+    // a List of columns that are being taken up by a car. If the difference between the two non-equal factors (meaning if row is
+    // equal then we're looking at column) is greater than one, then all values in between must also be added (to account for cars greater
+    // than length 2). Return that, and create a string of a 6x6 board, looking at each (row,col) to see if a car is taking up that space.
+    
 
     @Override
     public String toString(){
