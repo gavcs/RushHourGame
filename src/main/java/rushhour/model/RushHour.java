@@ -123,8 +123,8 @@ public class RushHour {
         return this.moveCount;
     }
 
-    //this helper function will create a list of strings in a format like 12R, where 1 is the row, 2 is the column, and R is the Symbol
     /*
+    //this helper function will create a list of strings in a format like 12R, where 1 is the row, 2 is the column, and R is the Symbol
     private List<String> carLocations(){
         Set<Character> ca = cars.keySet();
         LinkedList<Vehicle> l = new LinkedList<>();
@@ -159,7 +159,6 @@ public class RushHour {
         }
         return list;
     }
-
 
     private List<String> carLocations(){
         List<String> list = new LinkedList<>();
@@ -196,13 +195,37 @@ public class RushHour {
             int backr = c.getBack().getRow();
             int backc = c.getBack().getCol();
             if(frontr == backr){
+                if(!locations.containsKey(frontr)){
+                    locations.put(frontr, new LinkedList<>());
+                }
                 if(frontc > backc){
-                    List<Integer> l = new LinkedList<>();
                     for(int i = backc; i <= frontc; i++){
-                        l.add(i);
+                        locations.get(frontr).add(i);
                     }
                 } else {
-
+                    for(int i = frontc; i <= backc; i++){
+                        locations.get(frontr).add(i);
+                    }
+                }
+            } else {
+                if(frontr > backr){
+                    for(int i = backr; i <= frontr; i++){
+                        if(!locations.containsKey(i)){
+                            locations.put(i, new LinkedList<>());
+                            locations.get(i).add(backc);
+                        } else {
+                            locations.get(i).add(backc);
+                        }
+                    }
+                } else {
+                    for(int i = frontr; i <= backr; i++){
+                        if(!locations.containsKey(i)){
+                            locations.put(i, new LinkedList<>());
+                            locations.get(i).add(backc);
+                        } else {
+                            locations.get(i).add(backc);
+                        }
+                    }
                 }
             }
         }
@@ -239,7 +262,16 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            System.out.println(rh);
+            Map<Integer, List<Integer>> l = rh.carLocations();
+            Set<Integer> i = l.keySet();
+            for(int ii: i){
+                System.out.println(ii + ":");
+                List<Integer> ints = l.get(ii);
+                for(int iii: ints){
+                    System.out.print(iii + ",");
+                }
+                System.out.print("\n");
+            }
         } catch(IOException e){
             System.out.println("IOException");
         }
