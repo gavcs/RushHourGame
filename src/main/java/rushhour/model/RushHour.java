@@ -185,7 +185,30 @@ public class RushHour {
     // a List of columns that are being taken up by a car. If the difference between the two non-equal factors (meaning if row is
     // equal then we're looking at column) is greater than one, then all values in between must also be added (to account for cars greater
     // than length 2). Return that, and create a string of a 6x6 board, looking at each (row,col) to see if a car is taking up that space.
-    
+
+    private Map<Integer, List<Integer>> carLocations(){
+        Map<Integer, List<Integer>> locations = new HashMap<>();
+        Set<Character> cs = cars.keySet();
+        for(char ch: cs){
+            Vehicle c = cars.get(ch);
+            int frontr = c.getFront().getRow();
+            int frontc = c.getFront().getCol();
+            int backr = c.getBack().getRow();
+            int backc = c.getBack().getCol();
+            if(frontr == backr){
+                if(frontc > backc){
+                    List<Integer> l = new LinkedList<>();
+                    for(int i = backc; i <= frontc; i++){
+                        l.add(i);
+                    }
+                } else {
+
+                }
+            }
+        }
+        return locations;
+    }
+
 
     @Override
     public String toString(){
