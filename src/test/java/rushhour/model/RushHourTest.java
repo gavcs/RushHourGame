@@ -153,6 +153,22 @@ public class RushHourTest {
 
     @Test
     public void moveVehicleTest(){
-        
+        try {
+            RushHour rh = new RushHour("03_00");
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                Vehicle test = rh.getVehicle('A');
+                Position front = test.getFront();
+                Position back = test.getBack();
+                assertEquals(new Position(3, 3), front);
+                assertEquals(new Position(4, 3), back);
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    @Test
 }

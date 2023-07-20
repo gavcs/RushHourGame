@@ -59,6 +59,10 @@ public class RushHour {
         this.moveCount++;
     }
 
+    public Vehicle getVehicle(char symbol){
+        return cars.get(symbol);
+    }
+
     public boolean gameOver(){
         Vehicle car = cars.get('R');
         Position front = car.getFront();
@@ -72,6 +76,9 @@ public class RushHour {
     public Collection<Move> getPossibleMoves(){
         //create a Collection to return, and iterate through the existing cars
         Collection<Move> posMoves = new LinkedList<>();
+
+        Map<Integer, Map<Integer, Character>> locations = this.carLocations();
+        Set<Integer> row = locations.keySet();
         for(char key: cars.keySet()){
 
             //get the Vehicle and create Position variables to work with
@@ -79,36 +86,89 @@ public class RushHour {
             Position front = a.getFront();
             Position back = a.getBack();
             //checking if the car can move left or right, but checking which way the car is facing first is important 
-            if(front.getCol() > back.getCol()){
-                if(front.getCol() < BOARD_DIM){
-                    posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
-                }
-                if(back.getCol() > 0){
-                    posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
-                }
-            } else {
-                if(back.getCol() < BOARD_DIM){
-                    posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
-                }
-                if(front.getCol() > 0){
-                    posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+            if(front.getRow() == back.getRow()){
+                Set<Integer> col = locations.get(front.getRow()).keySet();
+                if(front.getCol() > back.getCol()){
+                    if(front.getCol() + 1 < BOARD_DIM){
+                        if(!col.contains(front.getCol() + 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                        } else {
+                            if(!row.contains(front.getRow())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                            }
+                        }
+                    }
+                    if(back.getCol() - 1 >= 0){
+                        if(!col.contains(back.getCol() - 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+                        } else {
+                            if(!row.contains(back.getRow())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                            }
+                        }
+                    }
+                } else {
+                    if(back.getCol() + 1 < BOARD_DIM){
+                        if(!col.contains(back.getCol() + 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                        } else {
+                            if(!row.contains(back.getRow())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.RIGHT));
+                            }
+                        }
+                    }
+                    if(front.getCol() - 1 >= 0){
+                        if(!col.contains(front.getCol() - 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+                        } else {
+                            if(!row.contains(front.getRow())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.LEFT));
+                            }
+                        }
+                    }
                 }
             }
 
             //now looking to see if the car could move up or down, but also need to check where it's facing again
-            if(front.getRow() > back.getRow()){
-                if(front.getRow() < BOARD_DIM){
-                    posMoves.add(new Move(a.getSymbol(), Direction.UP));
-                }
-                if(back.getRow() > 0){
-                    posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
-                }
-            } else {
-                if(back.getRow() < BOARD_DIM){
-                    posMoves.add(new Move(a.getSymbol(), Direction.UP));
-                }
-                if(front.getRow() > 0){
-                    posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+            if(front.getCol() == back.getCol()){
+                if(front.getRow() > back.getRow()){
+                    if(front.getRow() + 1 < BOARD_DIM){
+                        if(!row.contains(front.getRow() + 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                        } else {
+                            if(!locations.get(front.getRow() + 1).keySet().contains(front.getCol())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                            }
+                        }
+                    }
+                    if(back.getRow() - 1 >= 0){
+                        if(!row.contains(back.getRow() - 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                        } else {
+                            if(!locations.get(back.getRow() - 1).keySet().contains(back.getCol())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                            }
+                        }
+                    }
+                } else {
+                    if(back.getRow() + 1 < BOARD_DIM){
+                        if(!row.contains(back.getRow() + 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                        } else {
+                            if(!locations.get(back.getRow() + 1).keySet().contains(back.getCol())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.DOWN));
+                            }
+                        }
+                    }
+                    if(front.getRow() - 1 >= 0){
+                        if(!row.contains(front.getRow() - 1)){
+                            posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                        } else {
+                            if(!locations.get(front.getRow() - 1).keySet().contains(front.getCol())){
+                                posMoves.add(new Move(a.getSymbol(), Direction.UP));
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -206,23 +266,11 @@ public class RushHour {
 
     public static void main(String[] args){
         try{
-            RushHour rh = new RushHour("03_00.csv");
-            System.out.println(rh);
-            try {
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-            } catch (RushHourException e) {
-                e.printStackTrace(); 
+            RushHour rh = new RushHour("05_00.csv");
+            Collection<Move> moves = rh.getPossibleMoves();
+            for(Move m: moves){
+                System.out.println(m);
             }
-            System.out.println(rh);
-            try{
-                rh.moveVehicle(new Move('O', Direction.UP));
-            } catch(RushHourException e){
-                e.printStackTrace();
-            }
-            System.out.println(rh);
         } catch(IOException e){
             System.out.println("IOException");
         }

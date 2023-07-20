@@ -16,4 +16,9 @@ public class Move {
     public Direction getDirect () {
         return this.dir;
     }
+
+    @Override
+    public String toString(){
+        return this.getSymbol() + ": " + this.getDirect();
+    }
 }

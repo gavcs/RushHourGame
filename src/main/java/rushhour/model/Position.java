@@ -17,4 +17,14 @@ public class Position {
         return col;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Position){
+            Position o = (Position)other;
+            return (this.getRow() == o.getRow()) && (this.getCol() == o.getCol());
+        } else {
+            return false;
+        }
+    }
+
 }
