@@ -203,7 +203,7 @@ public class RushHour {
 
     public static void main(String[] args){
         try{
-            RushHour rh = new RushHour("03_00.csv");
+            RushHour rh = new RushHour("03_01.csv");
             System.out.println(rh);
         } catch(IOException e){
             System.out.println("IOException");
