@@ -203,4 +203,28 @@ public class RushHourTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void gameOverTest(){
+        try {
+            RushHour rh = new RushHour("03_00.csv");
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                boolean actual = rh.gameOver();
+                assertEquals(true, actual);
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }S
 }
