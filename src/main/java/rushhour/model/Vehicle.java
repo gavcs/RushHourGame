@@ -46,11 +46,19 @@ public class Vehicle {
             } else {
                 //checking which direction to move the cars, then redefining the front and back positions
                 if(dir == Direction.LEFT){
-                    this.back = new Position(backRow, backCol - 1);
-                    this.front = new Position(frontRow, frontCol - 1);
+                    if(backCol - 1 >= 0 && frontCol - 1 >= 0){
+                        this.back = new Position(backRow, backCol - 1);
+                        this.front = new Position(frontRow, frontCol - 1);
+                    } else {
+                        throw new RushHourException("Cannot move outside of bounds.");
+                    }
                 } else {
-                    this.back = new Position(backRow, backCol + 1);
-                    this.front = new Position(frontRow, frontCol + 1);
+                    if(backCol + 1 < RushHour.BOARD_DIM && frontCol + 1 < RushHour.BOARD_DIM){
+                        this.back = new Position(backRow, backCol + 1);
+                        this.front = new Position(frontRow, frontCol + 1);
+                    } else {
+                        throw new RushHourException("Cannot move outside of bounds.");
+                    }
                 }
             }
         //now need to do the opposite, to allow this to work for a vertical car
@@ -59,11 +67,19 @@ public class Vehicle {
                 throw new RushHourException("A vertical car cannot move left nor right.");
             } else {
                 if(dir == Direction.UP){
-                    this.back = new Position(backRow + 1, backCol);
-                    this.front = new Position(frontRow + 1, frontCol);
+                    if(backRow - 1 >= 0 && frontRow - 1 >= 0) {
+                        this.back = new Position(backRow - 1, backCol);
+                        this.front = new Position(frontRow - 1, frontCol);
+                    } else {
+                        throw new RushHourException("Cannot move outside of bounds.");
+                    }
                 } else {
-                    this.back = new Position(backRow - 1, backCol);
-                    this.front = new Position(frontRow - 1, frontCol);
+                    if(backRow + 1 < RushHour.BOARD_DIM && frontRow + 1 < RushHour.BOARD_DIM){
+                        this.back = new Position(backRow + 1, backCol);
+                        this.front = new Position(frontRow + 1, frontCol);
+                    } else {
+                        throw new RushHourException("Cannot move outside of bounds.");
+                    }
                 }
             }
         }

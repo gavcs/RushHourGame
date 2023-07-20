@@ -203,12 +203,15 @@ public class RushHour {
 
     public static void main(String[] args){
         try{
-            RushHour rh = new RushHour("03_01.csv");
+            RushHour rh = new RushHour("03_00.csv");
             System.out.println(rh);
             try {
-                rh.moveVehicle(new Move('O', Direction.UP));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
             } catch (RushHourException e) {
-                System.out.println("Rush Hour Exception");  
+                e.printStackTrace(); 
             }
             System.out.println(rh);
         } catch(IOException e){
