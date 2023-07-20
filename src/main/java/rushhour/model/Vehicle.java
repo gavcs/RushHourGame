@@ -94,4 +94,8 @@ public class Vehicle {
             return false;
         }
     }
+
+    public static Vehicle makeVehicle(){
+        return new Vehicle('A', new Position(0,0), new Position(0, 3)); 
+    }
 }

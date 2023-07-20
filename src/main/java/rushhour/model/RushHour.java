@@ -268,8 +268,7 @@ public class RushHour {
         try{
             RushHour rh = new RushHour("03_01.csv");
             System.out.println(rh);
-            Vehicle a = rh.getVehicle('A');
-            System.out.println(a.getFront().getCol());
+            
         } catch(IOException e){
             System.out.println("IOException");
         }
