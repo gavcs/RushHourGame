@@ -214,6 +214,12 @@ public class RushHour {
                 e.printStackTrace(); 
             }
             System.out.println(rh);
+            try{
+                rh.moveVehicle(new Move('O', Direction.UP));
+            } catch(RushHourException e){
+                e.printStackTrace();
+            }
+            System.out.println(rh);
         } catch(IOException e){
             System.out.println("IOException");
         }
