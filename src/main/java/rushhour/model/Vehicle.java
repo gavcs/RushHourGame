@@ -16,7 +16,7 @@ public class Vehicle {
         Position otherFront = other.getFront();
         Position otherBack = other.getBack();
         this.front = new Position(otherFront.getRow(), otherFront.getCol());
-        this.front = new Position(otherBack.getRow(), otherBack.getCol());
+        this.back = new Position(otherBack.getRow(), otherBack.getCol());
 
     }
 
