@@ -3,6 +3,7 @@ package rushhour.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 
@@ -171,4 +172,35 @@ public class RushHourTest {
     }
 
     @Test
+    public void getPossibleMovesTest(){
+        try {
+            RushHour rh1 = new RushHour("03_00.csv");
+            Collection<Move> c1 = rh1.getPossibleMoves();
+            String a1 = c1.toString();
+            assertEquals("[A: DOWN, A: UP, O: DOWN]", a1);
+
+            RushHour rh2 = new RushHour("05_00.csv");
+            Collection<Move> c2 = rh2.getPossibleMoves();
+            String a2 = c2.toString();
+            assertEquals("[R: LEFT, C: UP]", a2);
+
+            RushHour rh3 = new RushHour("13_00.csv");
+            Collection<Move> c3 = rh3.getPossibleMoves();
+            String a3 = c3.toString();
+            assertEquals("[A: DOWN, I: RIGHT, P: UP]", a3);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getVehicleTest(){
+        try {
+            RushHour rh = new RushHour("03_01.csv");
+            Vehicle actual = rh.getVehicle('A');
+            assertEquals(new Vehicle('A', new Position(2, 3), new Position(2, 4)), actual);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

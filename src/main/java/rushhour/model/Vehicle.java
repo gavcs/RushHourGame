@@ -84,4 +84,14 @@ public class Vehicle {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Vehicle){
+            Vehicle o = (Vehicle)other;
+            return (this.getSymbol() == (o.getSymbol())) && (this.getFront().equals(o.getFront())) && (this.getBack().equals(o.getBack()));
+        } else {
+            return false;
+        }
+    }
 }

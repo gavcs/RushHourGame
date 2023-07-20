@@ -266,11 +266,10 @@ public class RushHour {
 
     public static void main(String[] args){
         try{
-            RushHour rh = new RushHour("05_00.csv");
-            Collection<Move> moves = rh.getPossibleMoves();
-            for(Move m: moves){
-                System.out.println(m);
-            }
+            RushHour rh = new RushHour("03_01.csv");
+            System.out.println(rh);
+            Vehicle a = rh.getVehicle('A');
+            System.out.println(a.getFront().getCol());
         } catch(IOException e){
             System.out.println("IOException");
         }
