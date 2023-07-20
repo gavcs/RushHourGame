@@ -11,6 +11,15 @@ public class Vehicle {
         this.front = front;
     }
 
+    public Vehicle (Vehicle other) {
+        this.symbol = other.getSymbol();
+        Position otherFront = other.getFront();
+        Position otherBack = other.getBack();
+        this.front = new Position(otherFront.getRow(), otherFront.getCol());
+        this.front = new Position(otherBack.getRow(), otherBack.getCol());
+
+    }
+
     public char getSymbol(){
         return this.symbol;
     }
@@ -22,6 +31,8 @@ public class Vehicle {
     public Position getFront(){
         return this.front;
     }
+
+
 
     public void move(Direction dir) throws RushHourException{
         int backCol = back.getCol();
