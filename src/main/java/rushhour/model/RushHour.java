@@ -205,6 +205,12 @@ public class RushHour {
         try{
             RushHour rh = new RushHour("03_01.csv");
             System.out.println(rh);
+            try {
+                rh.moveVehicle(new Move('O', Direction.UP));
+            } catch (RushHourException e) {
+                System.out.println("Rush Hour Exception");  
+            }
+            System.out.println(rh);
         } catch(IOException e){
             System.out.println("IOException");
         }
