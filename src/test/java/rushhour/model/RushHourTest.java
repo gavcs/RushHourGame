@@ -226,5 +226,29 @@ public class RushHourTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }S
+    }
+
+    @Test
+    public void getMoveCountTest(){
+        try {
+            RushHour rh = new RushHour("03_00.csv");
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                int actual = rh.getMoveCount();
+                assertEquals(9, actual);
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
