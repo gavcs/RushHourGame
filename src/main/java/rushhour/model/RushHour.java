@@ -195,7 +195,10 @@ public class RushHour {
                     }
                 }
             }
-            board += "\n";
+            if(row + 1 != BOARD_DIM){
+                board += "\n";
+            }
+            
         }
 
         return board;
