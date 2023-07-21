@@ -115,6 +115,10 @@ public class RushHourCLI {
                 }
                 System.out.println(rushHour);
 
+                if (rushHour.gameOver()) {
+                    System.out.println("You beat the level! It took "+rushHour.getMoveCount()+" moves!");
+                }
+
             }    
         }catch(IOException e){
             
