@@ -18,7 +18,7 @@ public class RushHourCLI {
             System.out.println(rushHour);
             boolean forceQuit =  false;
                 System.out.println (" === List of Commands ===\n" +
-                    "'help' | display a list of commands\n" +
+                    "'help' | displays a list of commands\n" +
                     "'symbol + direction' | moves the vehicle(symbol) one space in the given direction\n" +
                     "'hint' | display an available move\n" +
                     "'reset' | resets the current filename board\n" +
@@ -29,13 +29,22 @@ public class RushHourCLI {
                 String input = scanner.nextLine();
                 switch(input){
                     case "help": 
+                        System.out.println(" === Help ===\n"+
+                        "'help' | displays a list of commands\n"+
+                        "'reset' | resets the current filename board\n"+
+                        "'hint' | display an available move\n"+
+                        "'quit' | quits the game\n"+
+                        "'move' | vehicle(symbol) + direction(up, down, left, right) - Moves the vehicle with the corresponding symbol in the specified direction\n"+
+                        "'solve' | The game will solve itself\n"+
+                        "------------------");
+                        break;
+
+                    case "hint":
+
+                    case "reset":
+
+                    case "quit":
                         
-                    case "hint";
-
-                    case "reset";
-
-                    case "quit";
-
 
                 }
             }    
