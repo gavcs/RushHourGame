@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.Scanner;
 
-import rushhour.model.Move;
 /* module imports */
 import rushhour.model.RushHour;
+import rushhour.model.RushHourException;
+import rushhour.model.Move;
+import rushhour.model.Direction;
 
 public class RushHourCLI {
     /* used for hint */
@@ -31,10 +33,13 @@ public class RushHourCLI {
                     "'reset' | resets the current filename board\n" +
                     "'quit' | quits the game\n" +
                     "-------------------------------------");
+
             while(!forceQuit) {
                 System.out.print("Enter command: ");
                 String input = scanner.nextLine();
                 switch(input) {
+
+                    /* displays help menu */
                     case "help": 
                         System.out.println (" === Help ===\n"+
                         "'help' | displays a list of commands\n"+
@@ -42,10 +47,10 @@ public class RushHourCLI {
                         "'hint' | display an available move\n"+
                         "'quit' | quits the game\n"+
                         "'move' | vehicle(symbol) + direction(up, down, left, right) - Moves the vehicle with the corresponding symbol in the specified direction\n"+
-                        "'solve' | The game will solve itself\n"+
                         "------------------");
                         break;
 
+                    /* hint command */
                     case "hint":
                         if (!rushHour.gameOver()) {
                             Collection <Move> moves =  rushHour.getPossibleMoves();
@@ -57,6 +62,7 @@ public class RushHourCLI {
 
                         break;
 
+                    /* reset command */
                     case "reset":
                         System.out.println ("Resetting Level");
                         rushHour = new RushHour(filename);
@@ -64,12 +70,51 @@ public class RushHourCLI {
 
                         break;
 
+                    /* quit command */
                     case "quit":
-                        System.out.println("Quitting");
+                        System.out.println ("Quitting");
                         forceQuit = true;
 
-                        break;                     
+                        break;       
+                    
+                        default:
+                        if (!rushHour.gameOver()) {
+                            String[] inputSplit = input.split(" ");
+                            if(inputSplit.length != 2) {
+                                System.out.println ("Invalid command");
+                            } else {
+                                char symbol;
+                                if(inputSplit[0].length() > 1) {
+                                    System.out.println("Invalid symbol");
+                                } else {
+                                    symbol = inputSplit[0].toUpperCase().charAt(0);
+                                    boolean hasDirection = false;
+                                    for(Direction direction : Direction.values()) {
+                                        if(direction.toString().toLowerCase().equals(inputSplit[1].toLowerCase())) {
+                                            hasDirection = true;
+                                        }
+                                    }
+                                    
+                                    if (hasDirection) {
+                                        Direction direction = Direction.valueOf(inputSplit[1].toUpperCase());
+                                        try {
+                                            rushHour.moveVehicle(new Move(symbol, direction));
+                                        } catch (RushHourException e) {
+                                            System.out.println(e.getMessage());
+                                        }
+                                        
+                                    } else {
+                                        System.out.println("Invalid direction, please enter Up, Down, Left, or Right");
+                                    }
+                                }
+                            }
+                        } else {
+                            System.out.println("No moves left to be made. Please reset or quit.");
+                        }
+                        break;
                 }
+                System.out.println(rushHour);
+
             }    
         }catch(IOException e){
             
