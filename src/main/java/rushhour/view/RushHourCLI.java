@@ -24,7 +24,21 @@ public class RushHourCLI {
                     "'reset' | resets the current filename board\n" +
                     "'quit' | quits the game\n" +
                     "-------------------------------------");
-               
+            while(!forceQuit){
+                System.out.print("Enter command: ");
+                String input = scanner.nextLine();
+                switch(input){
+                    case "help": 
+                        
+                    case "hint";
+
+                    case "reset";
+
+                    case "quit";
+
+
+                }
+            }    
         }catch(IOException e){
             
         System.out.println("IOException, check filename format (ex: 03_00.csv).");
