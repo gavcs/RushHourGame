@@ -15,6 +15,7 @@ public class RushHour {
     public static final char EMPTY_SYMBOL = '-';
     public static final Position EXIT_POS = new Position (2, 5);
     private int moveCount;
+    private RushHourObserver observer;
     
     /*
      * creating a map with the vehicles will allow for the moveVehicle method to move the car
@@ -22,7 +23,7 @@ public class RushHour {
      * each char has a unique character. When moveVehicle is called, it will pull the Vehicle associated
      * with the char in the Move move peram.
      */
-    private Map<Character, Vehicle> cars;
+    public Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
         FileReader read = new FileReader("data/" + filename);
@@ -45,6 +46,7 @@ public class RushHour {
         }
         reader.close();
         this.moveCount = 0;
+        this.observer = null;
     }
 
     public void moveVehicle(Move move) throws RushHourException{
@@ -57,6 +59,8 @@ public class RushHour {
 
         //must add to the moveCount
         this.moveCount++;
+
+        notifyObserver(carmove);
     }
 
     public Vehicle getVehicle(char symbol){
@@ -70,6 +74,16 @@ public class RushHour {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void registerObserver(RushHourObserver observer){
+        this.observer = observer;
+    }
+
+    private void notifyObserver(Vehicle vehicle){
+        if(this.observer != null){
+            this.observer.vehicleMoved(vehicle);
         }
     }
 
@@ -266,8 +280,23 @@ public class RushHour {
 
     public static void main(String[] args){
         try{
-            RushHour rh = new RushHour("03_01.csv");
-            System.out.println(rh);
+            RushHour rh = new RushHour("03_00.csv");
+            try {
+                Set<Character> keyset = rh.cars.keySet();
+                for(char c: keyset){
+                    System.out.println(rh.cars.get(c));
+                }
+                System.out.println("\n" + rh.toString() + "\n");
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                Set<Character> keyset2 = rh.cars.keySet();
+                for(char c: keyset2){
+                    System.out.println(rh.cars.get(c));
+                }
+                System.out.println("\n" + rh.toString());
+                
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
             
         } catch(IOException e){
             System.out.println("IOException");

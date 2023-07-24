@@ -95,6 +95,11 @@ public class Vehicle {
         }
     }
 
+    @Override
+    public String toString(){
+        return "Vehicle{char = " + this.getSymbol() + ", front = " + this.getFront() + ", back = " + this.getBack() + "}";
+    }
+
     public static Vehicle makeVehicle(){
         return new Vehicle('A', new Position(0,0), new Position(0, 3)); 
     }
