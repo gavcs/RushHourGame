@@ -17,6 +17,9 @@ public class CarMover implements RushHourObserver {
 
     @Override
     public void vehicleMoved(Vehicle vehicle) {
-        //unimplemented
+        if(vehicle.getFront().getRow() == vehicle.getBack().getRow())
+        char c = vehicle.getSymbol();
+        Node node = vehicles.get(c);
+        gp.
     }
 }

@@ -3,8 +3,6 @@ package rushhour.view;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,7 +17,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -41,12 +38,14 @@ public class RushHourGUI extends Application {
 
     private RushHour rushHour;
     private Map<Character, Node> vehicles;
+    private GridPane gp;
     
     @Override
     public void start(Stage stage) throws Exception {
         rushHour = new RushHour("03_00.csv");
         vehicles = new HashMap<>();
-        GridPane gp = new GridPane();
+        gp = new GridPane();
+        //CarMover is not functional
         rushHour.registerObserver(new CarMover(vehicles, gp));
         for(int row = 0; row < RushHour.BOARD_DIM; row++){
             for(int col = 0; col < RushHour.BOARD_DIM; col++){
@@ -103,7 +102,8 @@ public class RushHourGUI extends Application {
         Button button = new Button("", i);
         button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         button.setPrefSize(35, 35);
-        button.setOnAction(new MoveHandler(/* figure out what to put in here */));
+        //setOnAction is not functional
+        button.setOnAction(new MoveHandler(vehicle, direction, rushHour));
         return button;
     }
 
@@ -114,7 +114,9 @@ public class RushHourGUI extends Application {
         vb.setMinSize(100, 100);
         Button up = carButtonMaker(vehicle, Direction.UP, UPARROW);
         Button down = carButtonMaker(vehicle, Direction.DOWN, DOWNARROW);
-
+        vb.getChildren().addAll(up, down);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(100*scale);
         return vb;
     }
 
@@ -123,6 +125,11 @@ public class RushHourGUI extends Application {
         hb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         hb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         hb.setMinSize(100, 100);
+        Button left = carButtonMaker(vehicle, Direction.LEFT, LEFTARROW);
+        Button right = carButtonMaker(vehicle, Direction.RIGHT, RIGHTARROW);
+        hb.getChildren().addAll(left, right);
+        hb.setAlignment(Pos.CENTER);
+        hb.setSpacing(100*scale);
         return hb;
     }
 
