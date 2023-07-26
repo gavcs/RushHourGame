@@ -59,7 +59,20 @@ public class RushHourGUI extends Application {
 
         Collection<Vehicle> v = rushHour.getVehicles();
         for(Vehicle car: v){
+            int row = car.getBack().getRow();
+            int col = car.getBack().getCol();
+            int row2 = car.getFront().getRow() - row + 1;
+            int col2 = car.getFront().getCol() - col + 1;
 
+            if(car.vert()){
+                VBox vroom = verticalVehicle(car, Color.BLACK, row2 - 1);
+                gp.add(vroom, col, row, col2, row2);
+                vehicles.put(car.getSymbol(), vroom);
+            } else {
+                HBox vroom = horizontalVehicle(car, Color.BLACK, col2 - 1);
+                gp.add(vroom, col, row, col2, row2);
+                vehicles.put(car.getSymbol(), vroom);
+            }
         }
 
         Scene scene = new Scene(gp);

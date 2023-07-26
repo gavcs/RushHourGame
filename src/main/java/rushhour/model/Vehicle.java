@@ -32,7 +32,9 @@ public class Vehicle {
         return this.front;
     }
 
-
+    public boolean vert(){
+        return this.getFront().getCol() == this.getBack().getCol();
+    }
 
     public void move(Direction dir) throws RushHourException{
         int backCol = back.getCol();
