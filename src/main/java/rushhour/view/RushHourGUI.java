@@ -36,7 +36,7 @@ public class RushHourGUI extends Application {
     private static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpeg");
     private static final Color TILE = Color.rgb(255, 255, 255);
 
-    private RushHour rushHour;
+    public RushHour rushHour;
     private Map<Character, Node> vehicles;
     private GridPane gp;
     
@@ -46,7 +46,7 @@ public class RushHourGUI extends Application {
         vehicles = new HashMap<>();
         gp = new GridPane();
         //CarMover is not functional
-        rushHour.registerObserver(new CarMover(vehicles, gp));
+        rushHour.registerObserver(new CarMover(vehicles, gp, this));
         for(int row = 0; row < RushHour.BOARD_DIM; row++){
             for(int col = 0; col < RushHour.BOARD_DIM; col++){
                 Position pos = new Position(row, col);
@@ -62,13 +62,14 @@ public class RushHourGUI extends Application {
             int col = car.getBack().getCol();
             int row2 = car.getFront().getRow() - row + 1;
             int col2 = car.getFront().getCol() - col + 1;
+            char c = car.getSymbol();
 
             if(car.vert()){
-                VBox vroom = verticalVehicle(car, Color.BLACK, row2 - 1);
+                VBox vroom = verticalVehicle(car, CarColor.getColor(c), row2 - 1);
                 gp.add(vroom, col, row, col2, row2);
                 vehicles.put(car.getSymbol(), vroom);
             } else {
-                HBox vroom = horizontalVehicle(car, Color.BLACK, col2 - 1);
+                HBox vroom = horizontalVehicle(car, CarColor.getColor(c), col2 - 1);
                 gp.add(vroom, col, row, col2, row2);
                 vehicles.put(car.getSymbol(), vroom);
             }
@@ -107,7 +108,7 @@ public class RushHourGUI extends Application {
         return button;
     }
 
-    private VBox verticalVehicle(Vehicle vehicle, Color color, int scale){
+    public VBox verticalVehicle(Vehicle vehicle, Color color, int scale){
         VBox vb = new VBox();
         vb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         vb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
@@ -120,7 +121,7 @@ public class RushHourGUI extends Application {
         return vb;
     }
 
-    private HBox horizontalVehicle(Vehicle vehicle, Color color, int scale){
+    public HBox horizontalVehicle(Vehicle vehicle, Color color, int scale){
         HBox hb = new HBox();
         hb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         hb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
