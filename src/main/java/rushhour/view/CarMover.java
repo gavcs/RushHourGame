@@ -1,25 +1,22 @@
 package rushhour.view;
 
-import java.util.Collection;
-
-import javafx.scene.image.ImageView;
-import rushhour.model.Move;
-import rushhour.model.RushHour;
+import java.util.Map;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
 import rushhour.model.RushHourObserver;
 import rushhour.model.Vehicle;
 
 public class CarMover implements RushHourObserver {
-    public Collection<Vehicle> vehicles;
-    public RushHour rh;
+    public Map<Character, Node> vehicles;
+    public GridPane gp;
 
-    public CarMover(Collection<Vehicle> vehicles, RushHour rh){
+    public CarMover(Map<Character, Node> vehicles, GridPane gp){
         this.vehicles = vehicles;
-        this.rh = rh;
+        this.gp = gp;
     }
-
 
     @Override
     public void vehicleMoved(Vehicle vehicle) {
-        
+        //unimplemented
     }
 }
