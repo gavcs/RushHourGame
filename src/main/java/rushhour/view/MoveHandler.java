@@ -2,12 +2,9 @@ package rushhour.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
 import rushhour.model.Direction;
 import rushhour.model.Move;
 import rushhour.model.RushHour;
-import rushhour.model.RushHourException;
 import rushhour.model.Vehicle;
 
 public class MoveHandler implements EventHandler<ActionEvent> {

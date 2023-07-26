@@ -2,13 +2,7 @@ package rushhour.view;
 
 import java.util.Map;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rushhour.model.Direction;
-import rushhour.model.Move;
-import rushhour.model.RushHour;
 import rushhour.model.RushHourObserver;
 import rushhour.model.Vehicle;
 
