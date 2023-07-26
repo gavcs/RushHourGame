@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -21,6 +22,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -52,6 +54,13 @@ public class RushHourGUI extends Application {
                 gp.add(labelMaker(TILE, (pos.equals(RushHour.EXIT_POS))? "EXIT": "", true), row, col);
             }
         }
+        gp.setVgap(2);
+        gp.setHgap(2);
+
+        Collection<Vehicle> v = rushHour.getVehicles();
+        for(Vehicle car: v){
+
+        }
 
         Scene scene = new Scene(gp);
         stage.setTitle("Rush Hour Game");
@@ -74,12 +83,34 @@ public class RushHourGUI extends Application {
         return label;
     }
 
+    private Button carButtonMaker(Vehicle vehicle, Direction direction, Image image){
+        ImageView i = new ImageView(image);
+        i.setFitHeight(35);
+        i.setFitWidth(35);
+        Button button = new Button("", i);
+        button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        button.setPrefSize(35, 35);
+        button.setOnAction(new MoveHandler(/* figure out what to put in here */));
+        return button;
+    }
+
     private VBox verticalVehicle(Vehicle vehicle, Color color, int scale){
         VBox vb = new VBox();
         vb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         vb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         vb.setMinSize(100, 100);
+        Button up = carButtonMaker(vehicle, Direction.UP, UPARROW);
+        Button down = carButtonMaker(vehicle, Direction.DOWN, DOWNARROW);
+
         return vb;
+    }
+
+    private HBox horizontalVehicle(Vehicle vehicle, Color color, int scale){
+        HBox hb = new HBox();
+        hb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
+        hb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        hb.setMinSize(100, 100);
+        return hb;
     }
 
     public static void main(String[] args){
