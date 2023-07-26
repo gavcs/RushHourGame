@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class RushHour {
@@ -276,6 +277,15 @@ public class RushHour {
         }
 
         return board;
+    }
+
+    public Collection<Vehicle> getVehicles(){
+        Collection<Vehicle> vehicles = new LinkedList<>();
+        Set<Character> keySet = cars.keySet();
+        for(char c: keySet){
+            vehicles.add(cars.get(c));
+        }
+        return vehicles;
     }
 
     public static void main(String[] args){
