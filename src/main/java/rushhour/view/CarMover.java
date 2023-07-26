@@ -2,9 +2,11 @@ package rushhour.view;
 
 import java.util.Map;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import rushhour.model.Direction;
 import rushhour.model.Move;
 import rushhour.model.RushHour;
 import rushhour.model.RushHourObserver;
@@ -34,13 +36,11 @@ public class CarMover implements RushHourObserver {
         int col2 = vehicle.getFront().getCol() - col + 1;
 
         if(vehicle.vert()){
-            VBox vroom = gui.verticalVehicle(vehicle, CarColor.getColor(vehicle.getSymbol()), 100);
-            gp.add(vroom, col, row, col2, row2);
-            vehicles.put(vehicle.getSymbol(), vroom);
+            gp.add(node, col, row, col2, row2);
+            vehicles.put(vehicle.getSymbol(), node);
         } else {
-            HBox vroom = gui.horizontalVehicle(vehicle, CarColor.getColor(vehicle.getSymbol()), 100);
-            gp.add(vroom, col, row, col2, row2);
-            vehicles.put(vehicle.getSymbol(), vroom);
+            gp.add(node, col, row, col2, row2);
+            vehicles.put(vehicle.getSymbol(), node);
         }
     }
 }

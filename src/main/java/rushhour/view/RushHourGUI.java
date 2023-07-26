@@ -30,10 +30,10 @@ import rushhour.model.RushHour;
 import rushhour.model.Vehicle;
 
 public class RushHourGUI extends Application {
-    private static final Image UPARROW = new Image("file:assets/uparrow.jpeg");
-    private static final Image DOWNARROW = new Image("file:assets/downarrow.jpeg");
-    private static final Image LEFTARROW = new Image("file:assets/leftarrow.jpeg");
-    private static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpeg");
+    public static final Image UPARROW = new Image("file:assets/uparrow.jpeg");
+    public static final Image DOWNARROW = new Image("file:assets/downarrow.jpeg");
+    public static final Image LEFTARROW = new Image("file:assets/leftarrow.jpeg");
+    public static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpeg");
     private static final Color TILE = Color.rgb(255, 255, 255);
 
     public RushHour rushHour;
@@ -96,7 +96,7 @@ public class RushHourGUI extends Application {
         return label;
     }
 
-    private Button carButtonMaker(Vehicle vehicle, Direction direction, Image image){
+    public Button carButtonMaker(Vehicle vehicle, Direction direction, Image image){
         ImageView i = new ImageView(image);
         i.setFitHeight(35);
         i.setFitWidth(35);
@@ -108,13 +108,24 @@ public class RushHourGUI extends Application {
         return button;
     }
 
-    public VBox verticalVehicle(Vehicle vehicle, Color color, int scale){
+    private VBox verticalVehicle(Vehicle vehicle, Color color, int scale){
         VBox vb = new VBox();
         vb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
         vb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         vb.setMinSize(100, 100);
         Button up = carButtonMaker(vehicle, Direction.UP, UPARROW);
         Button down = carButtonMaker(vehicle, Direction.DOWN, DOWNARROW);
+        vb.getChildren().addAll(up, down);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(100*scale);
+        return vb;
+    }
+
+    public VBox verticalVehicle(Vehicle vehicle, Color color, int scale, Button up, Button down){
+        VBox vb = new VBox();
+        vb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
+        vb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        vb.setMinSize(100, 100);
         vb.getChildren().addAll(up, down);
         vb.setAlignment(Pos.CENTER);
         vb.setSpacing(100*scale);

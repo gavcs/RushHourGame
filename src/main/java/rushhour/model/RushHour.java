@@ -49,18 +49,58 @@ public class RushHour {
         this.observer = null;
     }
 
-    public void moveVehicle(Move move) throws RushHourException{
+    private boolean safeMove(Move move, Vehicle vehicle){
+        if(move.getDirect() == Direction.RIGHT && vehicle.vert() || move.getDirect() == Direction.LEFT && vehicle.vert()){
+            return false;
+        } else if(move.getDirect() == Direction.UP && !vehicle.vert() || move.getDirect() == Direction.DOWN && !vehicle.vert()){
+            return false;
+        }
+        Map<Integer, Map<Integer, Character>> map = carLocations();
+        Set<Integer> rowSet = map.keySet();
+        if(move.getDirect() == Direction.RIGHT){
+            if(!map.get(vehicle.getFront().getRow()).keySet().contains(vehicle.getFront().getCol() + 1)){
+                return true;
+            }
+        } else if(move.getDirect() == Direction.LEFT){
+            if(!map.get(vehicle.getBack().getRow()).keySet().contains(vehicle.getBack().getCol() - 1)){
+                return true;
+            }
+        } else if(move.getDirect() == Direction.UP){
+            if(!rowSet.contains(vehicle.getFront().getRow() + 1)){
+                return true;
+            }
+        } else if(move.getDirect() == Direction.DOWN){
+            if(!rowSet.contains(vehicle.getBack().getRow() - 1)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void moveVehicle(Move move){
         //get the car using the character in Move move as the key
         char key = move.getSymbol();
         Vehicle carmove = cars.get(key);
 
-        //move it using Vehicle.move()
-        carmove.move(move.getDirect());
+        if(safeMove(move, carmove)){
+            //move it using Vehicle.move()
+            try{
+                carmove.move(move.getDirect());
 
-        //must add to the moveCount
-        this.moveCount++;
-
-        notifyObserver(carmove);
+                //must add to the moveCount
+                this.moveCount++;
+            
+                notifyObserver(carmove);
+            } catch(RushHourException e){
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                throw new RushHourException("Cannot move one car into another");
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Vehicle getVehicle(char symbol){
@@ -290,23 +330,18 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            try {
-                Set<Character> keyset = rh.cars.keySet();
-                for(char c: keyset){
-                    System.out.println(rh.cars.get(c));
-                }
-                System.out.println("\n" + rh.toString() + "\n");
-                rh.moveVehicle(new Move('A', Direction.DOWN));
-                Set<Character> keyset2 = rh.cars.keySet();
-                for(char c: keyset2){
-                    System.out.println(rh.cars.get(c));
-                }
-                System.out.println("\n" + rh.toString());
-                
-            } catch (RushHourException e) {
-                e.printStackTrace();
+            Set<Character> keyset = rh.cars.keySet();
+            for(char c: keyset){
+                System.out.println(rh.cars.get(c));
             }
-            
+            System.out.println("\n" + rh.toString() + "\n");
+            rh.moveVehicle(new Move('A', Direction.DOWN));
+            Set<Character> keyset2 = rh.cars.keySet();
+            for(char c: keyset2){
+                System.out.println(rh.cars.get(c));
+            }
+            System.out.println("\n" + rh.toString());
+
         } catch(IOException e){
             System.out.println("IOException");
         }

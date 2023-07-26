@@ -23,11 +23,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        try {
-            rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
-        } catch (RushHourException e) {
-            e.printStackTrace();
-        }
+        rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
     }
     
 }
