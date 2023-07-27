@@ -75,6 +75,8 @@ public class RushHourGUI extends Application {
             }
         }
 
+        //start working on hints/UI stuff
+
         Scene scene = new Scene(gp);
         stage.setTitle("Rush Hour Game");
         stage.setScene(scene);
