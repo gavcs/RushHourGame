@@ -50,7 +50,7 @@ public class RushHour {
         notifyObserver(null);
     }
 
-    private boolean safeMove(Move move){
+    public boolean safeMove(Move move){
         if(this.gameOver()){
             return false;
         }
@@ -103,7 +103,7 @@ public class RushHour {
         this.observer = observer;
     }
 
-    public void notifyObserver(Vehicle vehicle){
+    private void notifyObserver(Vehicle vehicle){
         if(this.observer != null){
             this.observer.vehicleMoved(vehicle);
         }

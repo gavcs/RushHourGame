@@ -220,6 +220,13 @@ public class RushHourGUI extends Application {
             status.setText("Game Reset");
             hint.setText("...");
             gameOver = false;
+        } else if(state.equals("gameoverr")){
+            status.setText("Game is finished, you can't move anymore.");
+            hint.setText("Try hitting reset to play again.");
+        } else if(state.equals("edgeerr")){
+            status.setText("Cannot move car outside of bounds.");
+        } else if(state.equals("crasherr")){
+            status.setText("Cannot move car into another car");
         }
     }
 
@@ -245,7 +252,7 @@ public class RushHourGUI extends Application {
         button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         button.setPrefSize(35, 35);
         //setOnAction is not functional
-        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver, this));
+        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, this));
         return button;
     }
 
