@@ -131,6 +131,7 @@ public class RushHourGUI extends Application {
         Collection<Vehicle> cars = rushHour.getVehicles();
         setStatus("new");
         moveCars(cars, oldcars);
+        rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
     }
 
     public void moveCars(Collection<Vehicle> cars, Collection<Node> oldcars){
