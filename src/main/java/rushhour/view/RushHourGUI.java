@@ -3,7 +3,6 @@ package rushhour.view;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -40,13 +39,13 @@ public class RushHourGUI extends Application {
     public static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpeg");
     private static final Color TILE = Color.rgb(255, 255, 255);
 
-    public RushHour rushHour;
+    private RushHour rushHour;
     private Map<Character, Node> vehicles;
     private GridPane gp;
     private Label moves;
     private Label status;
-    private List<Node> gamestats;
     private boolean gameOver;
+    private Button button;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -54,8 +53,6 @@ public class RushHourGUI extends Application {
         rushHour = new RushHour("03_00.csv");
         vehicles = new HashMap<>();
         gp = new GridPane();
-        gamestats = new LinkedList<>();
-        //CarMover is not functional
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
         for(int row = 0; row < RushHour.BOARD_DIM; row++){
             for(int col = 0; col < RushHour.BOARD_DIM; col++){
@@ -65,6 +62,7 @@ public class RushHourGUI extends Application {
         }
         gp.setVgap(2);
         gp.setHgap(2);
+
 
         Collection<Vehicle> v = rushHour.getVehicles();
         for(Vehicle car: v){
@@ -92,12 +90,13 @@ public class RushHourGUI extends Application {
         moves.setPrefHeight(30);
         moves.setFont(new Font("Arial", 20));
         moves.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Button button = new Button("Reset Game");
+        button = new Button("Reset Game");
         button.setAlignment(Pos.CENTER_RIGHT);
         button.setPrefHeight(30);
         button.setTextAlignment(TextAlignment.LEFT);
         button.setFont(new Font("Arial", 20));
         button.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        button.setOnAction(new GameReset(this));
 
         bottom.getChildren().addAll(moves, button);
         bottom.setPrefHeight(30);
@@ -107,22 +106,71 @@ public class RushHourGUI extends Application {
         HBox.setHgrow(moves, Priority.ALWAYS);
         gamenmoves.getChildren().addAll(gp, bottom);
 
-        gamestats.add(moves);
-        
         VBox all = new VBox();
-        status = new Label("Game Start.");
+        status = new Label("Game Start");
         status.setFont(new Font("Arial", 25));
         status.setPrefHeight(40);
         status.setAlignment(Pos.CENTER);
         status.setMaxSize(620, 40);
         status.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
-        gamestats.add(status);
         all.getChildren().addAll(status, gamenmoves);
 
         Scene scene = new Scene(all);
         stage.setTitle("Rush Hour Game");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void reset() throws Exception {
+        Collection<Node> oldcars = new LinkedList<>();
+        for(char c: vehicles.keySet()){
+            oldcars.add(vehicles.get(c));
+        }
+        vehicles = new HashMap<>();
+        rushHour = new RushHour("03_00.csv");
+        Collection<Vehicle> cars = rushHour.getVehicles();
+        setStatus("new");
+        moveCars(cars, oldcars);
+    }
+
+    public void moveCars(Collection<Vehicle> cars, Collection<Node> oldcars){
+        for(Node n: oldcars){
+            gp.getChildren().remove(n);
+        }
+        for(Vehicle car: cars){
+            int row = car.getBack().getRow();
+            int col = car.getBack().getCol();
+            int row2 = car.getFront().getRow() - row + 1;
+            int col2 = car.getFront().getCol() - col + 1;
+            char c = car.getSymbol();
+
+            if(car.vert()){
+                VBox vroom = verticalVehicle(car, CarColor.getColor(c), row2 - 1);
+                vehicles.put(car.getSymbol(), vroom);
+            } else {
+                HBox vroom = horizontalVehicle(car, CarColor.getColor(c), col2 - 1);
+                vehicles.put(car.getSymbol(), vroom);
+            }
+        }
+        for(Vehicle vehicle: cars){
+            char c = vehicle.getSymbol();
+            Node node = vehicles.get(c);
+            gp.getChildren().remove(node);
+            vehicles.remove(c);
+    
+            int row = vehicle.getBack().getRow();
+            int col = vehicle.getBack().getCol();
+            int row2 = vehicle.getFront().getRow() - row + 1;
+            int col2 = vehicle.getFront().getCol() - col + 1;
+    
+            if(vehicle.vert()){
+                gp.add(node, col, row, col2, row2);
+                vehicles.put(vehicle.getSymbol(), node);
+            } else {
+                gp.add(node, col, row, col2, row2);
+                vehicles.put(vehicle.getSymbol(), node);
+            }
+        }
     }
 
     public void moveMade(){
@@ -133,6 +181,10 @@ public class RushHourGUI extends Application {
         if(state.equals("over")){
             status.setText("Game over. You won in " + rushHour.getMoveCount() + " moves!");
             gameOver = true;
+        } else if (state.equals("new")){
+            moves.setText("Moves Made: " + rushHour.getMoveCount());
+            status.setText("Game Start");
+            gameOver = false;
         }
     }
 
@@ -158,7 +210,7 @@ public class RushHourGUI extends Application {
         button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         button.setPrefSize(35, 35);
         //setOnAction is not functional
-        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver, this));
+        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver));
         return button;
     }
 
@@ -169,17 +221,6 @@ public class RushHourGUI extends Application {
         vb.setMinSize(100, 100);
         Button up = carButtonMaker(vehicle, Direction.UP, UPARROW);
         Button down = carButtonMaker(vehicle, Direction.DOWN, DOWNARROW);
-        vb.getChildren().addAll(up, down);
-        vb.setAlignment(Pos.CENTER);
-        vb.setSpacing(100*scale);
-        return vb;
-    }
-
-    public VBox verticalVehicle(Vehicle vehicle, Color color, int scale, Button up, Button down){
-        VBox vb = new VBox();
-        vb.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
-        vb.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-        vb.setMinSize(100, 100);
         vb.getChildren().addAll(up, down);
         vb.setAlignment(Pos.CENTER);
         vb.setSpacing(100*scale);

@@ -103,7 +103,7 @@ public class RushHour {
         this.observer = observer;
     }
 
-    private void notifyObserver(Vehicle vehicle){
+    public void notifyObserver(Vehicle vehicle){
         if(this.observer != null){
             this.observer.vehicleMoved(vehicle);
         }
