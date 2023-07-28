@@ -40,8 +40,5 @@ public class CarMover implements RushHourObserver {
             vehicles.put(vehicle.getSymbol(), node);
         }
         gui.moveMade();
-        if(rushHour.gameOver()){
-            gui.setStatus("over");
-        }
     }
 }

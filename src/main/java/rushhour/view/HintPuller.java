@@ -11,24 +11,28 @@ import rushhour.model.RushHour;
 public class HintPuller implements EventHandler<ActionEvent> {
     private RushHour rushHour;
     private RushHourGUI gui;
+    private boolean gameOver;
 
-    public HintPuller(RushHour rushHour, RushHourGUI gui){
+    public HintPuller(RushHour rushHour, RushHourGUI gui, boolean gameOver){
         this.rushHour = rushHour;
         this.gui = gui;
+        this.gameOver = gameOver;
     }
 
     @Override
     public void handle(ActionEvent event) {
-        Collection<Move> moves = rushHour.getPossibleMoves();
-        Random rand = new Random();
-        int i = rand.nextInt(moves.size());
-        int num = 0;
-        for(Move m: moves){
-            if(num == i){
-                gui.hint(m.hintHelper());
+        if(gameOver == false){
+            Collection<Move> moves = rushHour.getPossibleMoves();
+            Random rand = new Random();
+            int i = rand.nextInt(moves.size());
+            int n = 0;
+            for(Move move: moves){
+                if(i == n){
+                    gui.hint(move.hintHelper());
+                    break;
+                }
+                n++;
             }
         }
-        gui.setStatus("hint");
     }
-    
 }

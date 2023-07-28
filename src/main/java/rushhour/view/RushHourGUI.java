@@ -25,7 +25,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import rushhour.model.Direction;
 import rushhour.model.Position;
@@ -116,7 +115,7 @@ public class RushHourGUI extends Application {
         getHint.setFont(new Font("Arial", 20));
         getHint.setAlignment(Pos.CENTER_LEFT);
         getHint.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-        getHint.setOnAction(new HintPuller(rushHour, this));
+        getHint.setOnAction(new HintPuller(rushHour, this, gameOver));
 
         hint = new Label("...");
         hint.setPrefHeight(30);
@@ -145,7 +144,9 @@ public class RushHourGUI extends Application {
     }
 
     public void hint(String thehint){
-        hint.setText(thehint);
+        if(!gameOver){
+            hint.setText(thehint);
+        }
     }
 
     public void reset() throws Exception {
@@ -156,7 +157,7 @@ public class RushHourGUI extends Application {
         vehicles = new HashMap<>();
         rushHour = new RushHour("03_00.csv");
         Collection<Vehicle> cars = rushHour.getVehicles();
-        setStatus("new");
+        setStatus("reset");
         moveCars(cars, oldcars);
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
     }
@@ -205,13 +206,17 @@ public class RushHourGUI extends Application {
         moves.setText("Moves Made: " + rushHour.getMoveCount());
     }
 
+    public void statusMove(String move){
+        status.setText(move);
+    }
+
     public void setStatus(String state){
         if(state.equals("over")){
             status.setText("Game over. You won in " + rushHour.getMoveCount() + " moves!");
             gameOver = true;
-        } else if (state.equals("new")){
+        } else if(state.equals("reset")){
             moves.setText("Moves Made: " + rushHour.getMoveCount());
-            status.setText("Game Start");
+            status.setText("Game Reset");
             hint.setText("...");
             gameOver = false;
         }
@@ -239,7 +244,7 @@ public class RushHourGUI extends Application {
         button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         button.setPrefSize(35, 35);
         //setOnAction is not functional
-        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver));
+        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver, this));
         return button;
     }
 
