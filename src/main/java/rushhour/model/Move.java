@@ -21,4 +21,14 @@ public class Move {
     public String toString(){
         return this.getSymbol() + ": " + this.getDirect();
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Move){
+            Move o = (Move)other;
+            return (this.getSymbol() == o.getSymbol()) && (this.getDirect() == o.getDirect());
+        } else {
+            return false;
+        }
+    }
 }

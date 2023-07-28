@@ -49,36 +49,6 @@ public class RushHour {
         this.observer = null;
     }
 
-    /*
-    private boolean safeMove(Move move, Vehicle vehicle){
-        if(move.getDirect() == Direction.RIGHT && vehicle.vert() || move.getDirect() == Direction.LEFT && vehicle.vert()){
-            return false;
-        } else if(move.getDirect() == Direction.UP && !vehicle.vert() || move.getDirect() == Direction.DOWN && !vehicle.vert()){
-            return false;
-        }
-        Map<Integer, Map<Integer, Character>> map = carLocations();
-        Set<Integer> rowSet = map.keySet();
-        if(move.getDirect() == Direction.RIGHT){
-            if(!map.get(vehicle.getFront().getRow()).keySet().contains(vehicle.getFront().getCol() + 1)){
-                return true;
-            }
-        } else if(move.getDirect() == Direction.LEFT){
-            if(!map.get(vehicle.getBack().getRow()).keySet().contains(vehicle.getBack().getCol() - 1)){
-                return true;
-            }
-        } else if(move.getDirect() == Direction.UP){
-            if(!rowSet.contains(vehicle.getFront().getRow() + 1)){
-                return true;
-            }
-        } else if(move.getDirect() == Direction.DOWN){
-            if(!rowSet.contains(vehicle.getBack().getRow() - 1)){
-                return true;
-            }
-        }
-        return false;
-    }
-    */
-
     private boolean safeMove(Move move){
         Collection<Move> possibleMoves = this.getPossibleMoves();
         for(Move other: possibleMoves){
@@ -342,6 +312,9 @@ public class RushHour {
             for(Move move: moves){
                 System.out.println(move.toString());
             }
+            Move move = new Move('A', Direction.DOWN);
+            moves.stream().filter((Move a) -> a.equals(move)).forEach(System.out::println);
+            System.out.println(rh.safeMove(move));
 
         } catch(IOException e){
             System.out.println("IOException");
