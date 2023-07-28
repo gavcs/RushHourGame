@@ -17,12 +17,14 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import rushhour.model.Direction;
 import rushhour.model.Position;
@@ -49,7 +51,7 @@ public class RushHourGUI extends Application {
         rushHour.registerObserver(new CarMover(vehicles, gp, this));
         for(int row = 0; row < RushHour.BOARD_DIM; row++){
             for(int col = 0; col < RushHour.BOARD_DIM; col++){
-                Position pos = new Position(row, col);
+                Position pos = new Position(col, row);
                 gp.add(labelMaker(TILE, (pos.equals(RushHour.EXIT_POS))? "EXIT": "", true), row, col);
             }
         }
@@ -75,13 +77,14 @@ public class RushHourGUI extends Application {
             }
         }
 
+        
+
         //start working on hints/UI stuff
 
         Scene scene = new Scene(gp);
         stage.setTitle("Rush Hour Game");
         stage.setScene(scene);
         stage.show();
-    
     }
 
     private Label labelMaker(Color color, String text, boolean border){
@@ -92,7 +95,7 @@ public class RushHourGUI extends Application {
         }
         label.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         label.setPrefSize(100, 100);
-        label.setTextFill(Color.WHITE);
+        label.setTextFill(Color.BLACK);
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font("Arial", 25));
         return label;

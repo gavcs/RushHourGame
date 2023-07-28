@@ -47,8 +47,9 @@ public class RushHour {
         reader.close();
         this.moveCount = 0;
         this.observer = null;
+        notifyObserver(null);
     }
-
+    
     private boolean safeMove(Move move){
         Collection<Move> possibleMoves = this.getPossibleMoves();
         for(Move other: possibleMoves){
