@@ -8,11 +8,12 @@ public class GameReset implements EventHandler<ActionEvent> {
     public RushHour rushHour;
     public RushHourGUI gui;
 
-    public GameReset(RushHour rushHour, RushHourGUI gui, )
+    public GameReset(RushHour rushHour, RushHourGUI gui){
+
+    }
 
     @Override
     public void handle(ActionEvent event) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'handle'");
     }
 }

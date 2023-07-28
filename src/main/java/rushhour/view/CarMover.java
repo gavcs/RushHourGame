@@ -3,6 +3,7 @@ package rushhour.view;
 import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import rushhour.model.RushHour;
 import rushhour.model.RushHourObserver;
 import rushhour.model.Vehicle;
 
@@ -10,11 +11,13 @@ public class CarMover implements RushHourObserver {
     public Map<Character, Node> vehicles;
     public GridPane gp;
     public RushHourGUI gui;
+    public RushHour rushHour;
 
-    public CarMover(Map<Character, Node> vehicles, GridPane gp, RushHourGUI gui){
+    public CarMover(Map<Character, Node> vehicles, GridPane gp, RushHourGUI gui, RushHour rushHour){
         this.vehicles = vehicles;
         this.gp = gp;
         this.gui = gui;
+        this.rushHour = rushHour;
     }
 
     @Override
@@ -37,5 +40,8 @@ public class CarMover implements RushHourObserver {
             vehicles.put(vehicle.getSymbol(), node);
         }
         gui.moveMade();
+        if(rushHour.gameOver()){
+            gui.setStatus("over");
+        }
     }
 }

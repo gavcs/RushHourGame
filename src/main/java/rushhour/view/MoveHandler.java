@@ -12,19 +12,25 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     private Vehicle vehicle;
     private Direction direction;
     private RushHour rushHour;
+    private RushHourGUI gui;
+    private boolean gameOver;
 
-    public MoveHandler(Vehicle vehicle, Direction direction, RushHour rushHour){
+    public MoveHandler(Vehicle vehicle, Direction direction, RushHour rushHour, boolean gameOver, RushHourGUI gui){
         this.vehicle = vehicle;
         this.direction = direction;
+        this.gui = gui;
+        this.gameOver = gameOver;
         this.rushHour = rushHour;
     }
 
     @Override
     public void handle(ActionEvent event) {
-        try {
-            rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
-        } catch (RushHourException e) {
-            e.printStackTrace();
+        if(gameOver == false){
+            try {
+                rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
         }
     }
     

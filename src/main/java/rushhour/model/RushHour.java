@@ -49,8 +49,11 @@ public class RushHour {
         this.observer = null;
         notifyObserver(null);
     }
-    
+
     private boolean safeMove(Move move){
+        if(this.gameOver()){
+            return false;
+        }
         Collection<Move> possibleMoves = this.getPossibleMoves();
         for(Move other: possibleMoves){
             if(move.equals(other)){
@@ -309,13 +312,20 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            Collection<Move> moves = rh.getPossibleMoves();
-            for(Move move: moves){
-                System.out.println(move.toString());
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                System.out.println(rh.gameOver());
+            } catch (RushHourException e) {
+                e.printStackTrace();
             }
-            Move move = new Move('A', Direction.DOWN);
-            moves.stream().filter((Move a) -> a.equals(move)).forEach(System.out::println);
-            System.out.println(rh.safeMove(move));
 
         } catch(IOException e){
             System.out.println("IOException");

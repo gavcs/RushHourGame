@@ -44,16 +44,19 @@ public class RushHourGUI extends Application {
     private Map<Character, Node> vehicles;
     private GridPane gp;
     private Label moves;
+    private Label status;
     private List<Node> gamestats;
+    private boolean gameOver;
     
     @Override
     public void start(Stage stage) throws Exception {
+        gameOver = false;
         rushHour = new RushHour("03_00.csv");
         vehicles = new HashMap<>();
         gp = new GridPane();
         gamestats = new LinkedList<>();
         //CarMover is not functional
-        rushHour.registerObserver(new CarMover(vehicles, gp, this));
+        rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
         for(int row = 0; row < RushHour.BOARD_DIM; row++){
             for(int col = 0; col < RushHour.BOARD_DIM; col++){
                 Position pos = new Position(col, row);
@@ -107,7 +110,7 @@ public class RushHourGUI extends Application {
         gamestats.add(moves);
         
         VBox all = new VBox();
-        Label status = new Label("Game Start.");
+        status = new Label("Game Start.");
         status.setFont(new Font("Arial", 25));
         status.setPrefHeight(40);
         status.setAlignment(Pos.CENTER);
@@ -124,6 +127,13 @@ public class RushHourGUI extends Application {
 
     public void moveMade(){
         moves.setText("Moves Made: " + rushHour.getMoveCount());
+    }
+
+    public void setStatus(String state){
+        if(state.equals("over")){
+            status.setText("Game over. You won in " + rushHour.getMoveCount() + " moves!");
+            gameOver = true;
+        }
     }
 
     private Label labelMaker(Color color, String text, boolean border){
@@ -148,7 +158,7 @@ public class RushHourGUI extends Application {
         button.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         button.setPrefSize(35, 35);
         //setOnAction is not functional
-        button.setOnAction(new MoveHandler(vehicle, direction, rushHour));
+        button.setOnAction(new MoveHandler(vehicle, direction, rushHour, gameOver, this));
         return button;
     }
 
