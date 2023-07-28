@@ -36,5 +36,6 @@ public class CarMover implements RushHourObserver {
             gp.add(node, col, row, col2, row2);
             vehicles.put(vehicle.getSymbol(), node);
         }
+        gui.moveMade();
     }
 }
