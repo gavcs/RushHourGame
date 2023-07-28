@@ -44,6 +44,8 @@ public class RushHourGUI extends Application {
     private GridPane gp;
     private Label moves;
     private Label status;
+    private Label hint;
+    private Button getHint;
     private boolean gameOver;
     private Button button;
     
@@ -85,15 +87,16 @@ public class RushHourGUI extends Application {
 
         VBox gamenmoves = new VBox();
         HBox bottom = new HBox();
+
         moves = new Label("Moves Made: " + rushHour.getMoveCount());
         moves.setAlignment(Pos.CENTER_LEFT);
         moves.setPrefHeight(30);
         moves.setFont(new Font("Arial", 20));
         moves.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
         button = new Button("Reset Game");
         button.setAlignment(Pos.CENTER_RIGHT);
         button.setPrefHeight(30);
-        button.setTextAlignment(TextAlignment.LEFT);
         button.setFont(new Font("Arial", 20));
         button.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         button.setOnAction(new GameReset(this));
@@ -106,6 +109,26 @@ public class RushHourGUI extends Application {
         HBox.setHgrow(moves, Priority.ALWAYS);
         gamenmoves.getChildren().addAll(gp, bottom);
 
+        HBox hintbox = new HBox();
+
+        getHint = new Button("Hint");
+        getHint.setPrefHeight(30);
+        getHint.setFont(new Font("Arial", 20));
+        getHint.setAlignment(Pos.CENTER_LEFT);
+        getHint.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        getHint.setOnAction(new HintPuller(rushHour, this));
+
+        hint = new Label("...");
+        hint.setPrefHeight(30);
+        hint.setFont(new Font("Arial", 20));
+        hint.setAlignment(Pos.CENTER_LEFT);
+        hint.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        HBox.setHgrow(hint, Priority.ALWAYS);
+
+        hintbox.getChildren().addAll(getHint, hint);
+        hintbox.setMaxSize(620, 30);
+        hintbox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
+
         VBox all = new VBox();
         status = new Label("Game Start");
         status.setFont(new Font("Arial", 25));
@@ -113,12 +136,16 @@ public class RushHourGUI extends Application {
         status.setAlignment(Pos.CENTER);
         status.setMaxSize(620, 40);
         status.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
-        all.getChildren().addAll(status, gamenmoves);
+        all.getChildren().addAll(status, hintbox, gamenmoves);
 
         Scene scene = new Scene(all);
         stage.setTitle("Rush Hour Game");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void hint(String thehint){
+        hint.setText(thehint);
     }
 
     public void reset() throws Exception {
@@ -185,6 +212,7 @@ public class RushHourGUI extends Application {
         } else if (state.equals("new")){
             moves.setText("Moves Made: " + rushHour.getMoveCount());
             status.setText("Game Start");
+            hint.setText("...");
             gameOver = false;
         }
     }

@@ -32,4 +32,36 @@ public class CarColor {
             return Color.INDIGO;
         }
     }
+
+    public static String colorToString(Color color){
+        if(color == Color.ORANGE){
+            return "orange";
+        } else if(color == Color.AQUA){
+            return "aqua";
+        } else if(color == Color.BLACK){
+            return "black";
+        } else if(color == Color.CRIMSON){
+            return "crimson";
+        } else if(color == Color.DARKBLUE){
+            return "dark blue";
+        } else if(color == Color.PURPLE){
+            return "purple";
+        } else if(color == Color.RED){
+            return "red";
+        } else if(color == Color.YELLOW){
+            return "yellow";
+        } else if(color == Color.GREY){
+            return "grey";
+        } else if(color == Color.FIREBRICK){
+            return "firebrick";
+        } else if(color == Color.GREEN){
+            return "green";
+        } else if(color == Color.HOTPINK){
+            return "hot pink";
+        } else if(color == Color.INDIGO){
+            return "indigo";
+        } else {
+            return "no color to return";
+        }
+    }
 }

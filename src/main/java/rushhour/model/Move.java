@@ -1,5 +1,7 @@
 package rushhour.model;
 
+import rushhour.view.CarColor;
+
 public class Move {
     private char symbol;
     private Direction dir;
@@ -15,6 +17,10 @@ public class Move {
 
     public Direction getDirect () {
         return this.dir;
+    }
+
+    public String hintHelper(){
+        return "Move the " + CarColor.colorToString(CarColor.getColor(this.getSymbol())) + " vehicle " + this.getDirect().toString();
     }
 
     @Override
