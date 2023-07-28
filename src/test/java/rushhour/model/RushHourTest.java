@@ -156,12 +156,16 @@ public class RushHourTest {
     public void moveVehicleTest(){
         try {
             RushHour rh = new RushHour("03_00");
-            rh.moveVehicle(new Move('A', Direction.DOWN));
-            Vehicle test = rh.getVehicle('A');
-            Position front = test.getFront();
-            Position back = test.getBack();
-            assertEquals(new Position(3, 3), front);
-            assertEquals(new Position(4, 3), back);
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                Vehicle test = rh.getVehicle('A');
+                Position front = test.getFront();
+                Position back = test.getBack();
+                assertEquals(new Position(3, 3), front);
+                assertEquals(new Position(4, 3), back);
+            } catch (RushHourException e){
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -224,17 +228,21 @@ public class RushHourTest {
     public void getMoveCountTest(){
         try {
             RushHour rh = new RushHour("03_00.csv");
-            rh.moveVehicle(new Move('A', Direction.DOWN));
-            rh.moveVehicle(new Move('A', Direction.DOWN));
-            rh.moveVehicle(new Move('O', Direction.DOWN));
-            rh.moveVehicle(new Move('O', Direction.DOWN));
-            rh.moveVehicle(new Move('O', Direction.DOWN));
-            rh.moveVehicle(new Move('R', Direction.RIGHT));
-            rh.moveVehicle(new Move('R', Direction.RIGHT));
-            rh.moveVehicle(new Move('R', Direction.RIGHT));
-            rh.moveVehicle(new Move('R', Direction.RIGHT));
-            int actual = rh.getMoveCount();
-            assertEquals(9, actual);
+            try {
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('A', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('O', Direction.DOWN));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                rh.moveVehicle(new Move('R', Direction.RIGHT));
+                int actual = rh.getMoveCount();
+                assertEquals(9, actual);
+            } catch (RushHourException e){
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

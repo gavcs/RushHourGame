@@ -49,6 +49,7 @@ public class RushHour {
         this.observer = null;
     }
 
+    /*
     private boolean safeMove(Move move, Vehicle vehicle){
         if(move.getDirect() == Direction.RIGHT && vehicle.vert() || move.getDirect() == Direction.LEFT && vehicle.vert()){
             return false;
@@ -76,27 +77,34 @@ public class RushHour {
         }
         return false;
     }
+    */
 
-    public void moveVehicle(Move move){
+    private boolean safeMove(Move move){
+        Collection<Move> possibleMoves = this.getPossibleMoves();
+        for(Move other: possibleMoves){
+            if(move.equals(other)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void moveVehicle(Move move) throws RushHourException{
         //get the car using the character in Move move as the key
         char key = move.getSymbol();
         Vehicle carmove = cars.get(key);
 
-        if(safeMove(move, carmove)){
+        if(safeMove(move)){
             //move it using Vehicle.move()
-            try{
-                carmove.move(move.getDirect());
+            carmove.move(move.getDirect());
 
-                //must add to the moveCount
-                this.moveCount++;
-            
-                notifyObserver(carmove);
-            } catch(RushHourException e){
-                e.printStackTrace();
-            }
+            //must add to the moveCount
+            this.moveCount++;
+        
+            notifyObserver(carmove);
         } else {
             try {
-                throw new RushHourException("Cannot move one car into another");
+                throw new RushHourException("Invalid move");
             } catch (RushHourException e) {
                 e.printStackTrace();
             }
@@ -330,17 +338,10 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            Set<Character> keyset = rh.cars.keySet();
-            for(char c: keyset){
-                System.out.println(rh.cars.get(c));
+            Collection<Move> moves = rh.getPossibleMoves();
+            for(Move move: moves){
+                System.out.println(move.toString());
             }
-            System.out.println("\n" + rh.toString() + "\n");
-            rh.moveVehicle(new Move('A', Direction.DOWN));
-            Set<Character> keyset2 = rh.cars.keySet();
-            for(char c: keyset2){
-                System.out.println(rh.cars.get(c));
-            }
-            System.out.println("\n" + rh.toString());
 
         } catch(IOException e){
             System.out.println("IOException");

@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import rushhour.model.Direction;
 import rushhour.model.Move;
 import rushhour.model.RushHour;
+import rushhour.model.RushHourException;
 import rushhour.model.Vehicle;
 
 public class MoveHandler implements EventHandler<ActionEvent> {
@@ -20,7 +21,11 @@ public class MoveHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
+        try {
+            rushHour.moveVehicle(new Move(vehicle.getSymbol(), direction));
+        } catch (RushHourException e) {
+            e.printStackTrace();
+        }
     }
     
 }

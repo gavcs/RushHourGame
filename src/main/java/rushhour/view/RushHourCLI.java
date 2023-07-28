@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 /* module imports */
 import rushhour.model.RushHour;
+import rushhour.model.RushHourException;
 import rushhour.model.Move;
 import rushhour.model.Direction;
 
@@ -96,7 +97,11 @@ public class RushHourCLI {
                                     
                                     if (hasDirection) {
                                         Direction direction = Direction.valueOf(inputSplit[1].toUpperCase());
-                                        rushHour.moveVehicle(new Move(symbol, direction));
+                                        try {
+                                            rushHour.moveVehicle(new Move(symbol, direction));
+                                        } catch (RushHourException e) {
+                                            e.printStackTrace();
+                                        }
                                         
                                     } else {
                                         System.out.println("Invalid direction, please enter Up, Down, Left, or Right");
