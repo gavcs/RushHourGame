@@ -35,7 +35,7 @@ public class RushHourGUI extends Application {
     public static final Image UPARROW = new Image("file:assets/uparrow.jpeg");
     public static final Image DOWNARROW = new Image("file:assets/downarrow.jpeg");
     public static final Image LEFTARROW = new Image("file:assets/leftarrow.jpeg");
-    public static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpeg");
+    public static final Image RIGHTARROW = new Image("file:assets/rightarrow.jpg");
     private static final Color TILE = Color.rgb(255, 255, 255);
 
     private RushHour rushHour;
@@ -213,6 +213,7 @@ public class RushHourGUI extends Application {
     public void setStatus(String state){
         if(state.equals("over")){
             status.setText("Game over. You won in " + rushHour.getMoveCount() + " moves!");
+            hint.setText("Great job!");
             gameOver = true;
         } else if(state.equals("reset")){
             moves.setText("Moves Made: " + rushHour.getMoveCount());
