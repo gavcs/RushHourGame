@@ -47,11 +47,12 @@ public class RushHourGUI extends Application {
     private Button getHint;
     private boolean gameOver;
     private Button button;
+    private Collection<Vehicle> cars;
     
     @Override
     public void start(Stage stage) throws Exception {
         gameOver = false;
-        rushHour = new RushHour("03_00.csv");
+        rushHour = new RushHour("13_00.csv");
         vehicles = new HashMap<>();
         gp = new GridPane();
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
@@ -65,8 +66,8 @@ public class RushHourGUI extends Application {
         gp.setHgap(2);
 
 
-        Collection<Vehicle> v = rushHour.getVehicles();
-        for(Vehicle car: v){
+        cars = rushHour.getVehicles();
+        for(Vehicle car: cars){
             int row = car.getBack().getRow();
             int col = car.getBack().getCol();
             int row2 = car.getFront().getRow() - row + 1;
@@ -156,7 +157,7 @@ public class RushHourGUI extends Application {
         }
         vehicles = new HashMap<>();
         rushHour = new RushHour("03_00.csv");
-        Collection<Vehicle> cars = rushHour.getVehicles();
+        cars = rushHour.getVehicles();
         setStatus("reset");
         moveCars(cars, oldcars);
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
@@ -219,6 +220,7 @@ public class RushHourGUI extends Application {
             moves.setText("Moves Made: " + rushHour.getMoveCount());
             status.setText("Game Reset");
             hint.setText("...");
+            getHint.setOnAction(new HintPuller(rushHour, this, gameOver));
             gameOver = false;
         } else if(state.equals("gameoverr")){
             status.setText("Game is finished, you can't move anymore.");
