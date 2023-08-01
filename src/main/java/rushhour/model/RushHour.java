@@ -222,9 +222,6 @@ public class RushHour implements Configuration<RushHour> {
                 }
             }
         }
-        if(posMoves.size() == 0){
-            return null;
-        }
         return posMoves;
     }
 
@@ -329,7 +326,11 @@ public class RushHour implements Configuration<RushHour> {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            rh.solve();
+            Collection<Move> moves = rh.getPossibleMoves();
+            for(Move m: moves){
+                System.out.println(m.toString());
+            }
+            System.out.println(rh.getVehicle('R').getBack().getCol() + "\n\n" + rh.toString());
         } catch(IOException e){
             System.out.println("IOException");
         }
@@ -353,7 +354,7 @@ public class RushHour implements Configuration<RushHour> {
 
     @Override
     public boolean isValid() {
-        return this.getPossibleMoves() != null;
+        return this.getPossibleMoves().size() != 0;
     }
 
     @Override
@@ -363,7 +364,7 @@ public class RushHour implements Configuration<RushHour> {
 
     public void solve(){
         System.out.println(this.toString());
-        Backtracker<RushHour> bt = new Backtracker<>(false);
+        Backtracker<RushHour> bt = new Backtracker<>(true);
         bt.solve(this);
         System.out.println(this.toString());
     }

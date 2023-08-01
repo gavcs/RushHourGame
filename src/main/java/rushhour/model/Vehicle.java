@@ -36,6 +36,38 @@ public class Vehicle {
         return this.getFront().getCol() == this.getBack().getCol();
     }
 
+    // literally useless, and I have no idea why because it seems like it would work, but it's saying that the red car in
+    // 03_00.csv can move left from start, which is weird because when I print the back column number, it's 0!!!! HOW?!
+    public boolean canMove(Direction dir){
+        if(dir.equals(Direction.RIGHT)){
+            int fr = this.getFront().getCol() + 1;
+            if(fr == RushHour.BOARD_DIM){
+                return false;
+            }
+            return true;
+        } else if (dir.equals(Direction.LEFT)){
+            int bl = this.getBack().getCol();
+            if(bl <= 0){
+                return false;
+            } else {
+                return true;
+            }
+        } else if(dir.equals(Direction.UP)){
+            int bu = this.getBack().getRow();
+            if(bu == 0){
+                return false;
+            }
+            return true;
+        } else if(dir.equals(Direction.DOWN)){
+            int fd = this.getFront().getRow() + 1;
+            if(fd == RushHour.BOARD_DIM){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public void move(Direction dir) throws RushHourException{
         int backCol = back.getCol();
         int backRow = back.getRow();

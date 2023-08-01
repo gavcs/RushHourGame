@@ -53,7 +53,7 @@ public class RushHourGUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         gameOver = false;
-        rushHour = new RushHour("13_00.csv");
+        rushHour = new RushHour("03_00.csv");
         vehicles = new HashMap<>();
         gp = new GridPane();
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
