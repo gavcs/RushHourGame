@@ -9,7 +9,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-public class RushHour {
+import backtracker.Backtracker;
+import backtracker.Configuration;
+
+public class RushHour implements Configuration<RushHour> {
     public static final int BOARD_DIM = 6;
     public static final char RED_SYMBOL = 'R';
     public static final char EMPTY_SYMBOL = '-';
@@ -23,7 +26,7 @@ public class RushHour {
      * each char has a unique character. When moveVehicle is called, it will pull the Vehicle associated
      * with the char in the Move move peram.
      */
-    public Map<Character, Vehicle> cars;
+    private Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
         FileReader read = new FileReader("data/" + filename);
@@ -47,8 +50,15 @@ public class RushHour {
         reader.close();
         this.moveCount = 0;
         this.observer = null;
-        notifyObserver(null);
     }
+
+    public RushHour(RushHour other){
+        this.observer = other.getObserver();
+        this.moveCount = other.getMoveCount();
+        this.cars = other.getCars();
+    }
+
+    public Map<Character, Vehicle> getCars(){return this.cars;}
 
     public boolean safeMove(Move move){
         if(this.gameOver()){
@@ -107,6 +117,10 @@ public class RushHour {
         if(this.observer != null){
             this.observer.vehicleMoved(vehicle);
         }
+    }
+
+    public RushHourObserver getObserver(){
+        return this.observer;
     }
 
     public Collection<Move> getPossibleMoves(){
@@ -207,6 +221,9 @@ public class RushHour {
                     }
                 }
             }
+        }
+        if(posMoves.size() == 0){
+            return null;
         }
         return posMoves;
     }
@@ -312,23 +329,42 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            try {
-                rh.moveVehicle(new Move('A', Direction.DOWN));
-                rh.moveVehicle(new Move('A', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('O', Direction.DOWN));
-                rh.moveVehicle(new Move('R', Direction.RIGHT));
-                rh.moveVehicle(new Move('R', Direction.RIGHT));
-                rh.moveVehicle(new Move('R', Direction.RIGHT));
-                rh.moveVehicle(new Move('R', Direction.RIGHT));
-                System.out.println(rh.gameOver());
-            } catch (RushHourException e) {
-                e.printStackTrace();
-            }
-
+            rh.solve();
         } catch(IOException e){
             System.out.println("IOException");
         }
+    }
+
+    @Override
+    public Collection<RushHour> getSuccessors() {
+        Collection<RushHour> rh = new LinkedList<>();
+        Collection<Move> moves = this.getPossibleMoves();
+        for(Move m: moves){
+            RushHour other = new RushHour(this);
+            try {
+                other.moveVehicle(m);
+                rh.add(other);
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
+        }
+        return rh;
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.getPossibleMoves() != null;
+    }
+
+    @Override
+    public boolean isGoal() {
+        return this.gameOver();
+    }
+
+    public void solve(){
+        System.out.println(this.toString());
+        Backtracker<RushHour> bt = new Backtracker<>(false);
+        bt.solve(this);
+        System.out.println(this.toString());
     }
 }

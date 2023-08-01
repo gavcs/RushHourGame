@@ -48,6 +48,7 @@ public class RushHourGUI extends Application {
     private boolean gameOver;
     private Button button;
     private Collection<Vehicle> cars;
+    private Button solve;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -93,6 +94,12 @@ public class RushHourGUI extends Application {
         moves.setPrefHeight(30);
         moves.setFont(new Font("Arial", 20));
         moves.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        solve = new Button("Solve Game");
+        solve.setAlignment(Pos.CENTER_RIGHT);
+        solve.setPrefHeight(30);
+        solve.setFont(new Font("Arial", 20));
+        solve.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         button = new Button("Reset Game");
         button.setAlignment(Pos.CENTER_RIGHT);
