@@ -52,8 +52,16 @@ public class RushHour {
         this.observer = null;
     }
 
-    public RushHour(RushHour other) throws IOException{
+    public RushHour(RushHour other, Collection<Move> movesMade) throws IOException{
         this(other.filename);
+        for(Move m: movesMade){
+            try {
+                this.moveVehicle(m);
+            } catch (RushHourException e) {
+
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getFile(){return this.filename;}
@@ -337,14 +345,7 @@ public class RushHour {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            RushHour other = new RushHour(rh);
-            try {
-                other.moveVehicle(new Move('O', Direction.DOWN));
-                System.out.println(other);
-                System.out.println(rh);
-            } catch (RushHourException e) {
-                e.printStackTrace();
-            }
+            
         } catch(IOException e){
             System.out.println("IOException");
         }

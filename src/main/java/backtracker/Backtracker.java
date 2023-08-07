@@ -1,5 +1,7 @@
 package backtracker;
 
+import java.util.Collection;
+
 /**
  * This class represents the classic recursive backtracking algorithm.
  * It has a solver that can take a valid configuration and return a
@@ -50,7 +52,8 @@ public class Backtracker<C extends Configuration<C>> {
             debugPrint("\tGoal config", config);
             return config;
         } else {
-            for (C child : config.getSuccessors()) {
+            Collection<C> successors = config.getSuccessors();
+            for (C child : successors) {
                 if (child.isValid()) {
                     debugPrint("\tValid successor", child);
                     C sol = solve(child);

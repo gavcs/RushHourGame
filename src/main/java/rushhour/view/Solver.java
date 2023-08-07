@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import rushhour.model.RushHour;
 import rushhour.model.RushHourConfig;
+import backtracker.Backtracker;
 
 public class Solver implements EventHandler<ActionEvent> {
     private RushHour rushHour;
@@ -15,7 +16,8 @@ public class Solver implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         RushHourConfig rhc = new RushHourConfig(rushHour);
-        Backrac
+        Backtracker<RushHourConfig> solution = new Backtracker<>(false);
+        
     }
     
 }
