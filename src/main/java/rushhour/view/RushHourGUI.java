@@ -157,20 +157,26 @@ public class RushHourGUI extends Application {
         stage.show();
     }
 
-    public void solveHandle(int nummoves, RushHour rh){
-        Collection<Node> oldcars = new LinkedList<>();
-        for(char c: vehicles.keySet()){
-            oldcars.add(vehicles.get(c));
+    public void solveHandle(int nummoves, RushHour rh, boolean possible){
+        if(possible){
+            Collection<Node> oldcars = new LinkedList<>();
+            for(char c: vehicles.keySet()){
+                oldcars.add(vehicles.get(c));
+            }
+            vehicles = new HashMap<>();
+            rushHour = rh;
+            gameOver = true;
+            cars = rushHour.getVehicles();
+            status.setText("Game solved in " + nummoves + " moves.");
+            hint.setText("Think you could solve it in less moves? Try it!");
+            moveMade();
+            moveCars(cars, oldcars);
+            rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
+        } else {
+            status.setText("Game is not possible to solve, tricked yah!");
+            hint.setText("Want to try another one?");
+            moves.setText("null");
         }
-        vehicles = new HashMap<>();
-        rushHour = rh;
-        gameOver = true;
-        cars = rushHour.getVehicles();
-        status.setText("Game solved in " + nummoves + " moves.");
-        hint.setText("Think you could solve it in less moves? Try it!");
-        moveMade();
-        moveCars(cars, oldcars);
-        rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
     }
 
     public RushHour getRH(){return this.rushHour;}

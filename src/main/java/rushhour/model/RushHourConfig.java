@@ -76,6 +76,12 @@ public class RushHourConfig implements Configuration<RushHourConfig> {
         return this.rh.toString();
     }
 
+    public static RushHourConfig solve(RushHour rushHour){
+        RushHourConfig rhc = new RushHourConfig(rushHour);
+        Backtracker<RushHourConfig> bt = new Backtracker<>(false);
+        return bt.solve(rhc);
+    }
+
     public static void main(String[] args){
         try {
             RushHour rh = new RushHour("03_00.csv");
