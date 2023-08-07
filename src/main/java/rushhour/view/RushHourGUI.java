@@ -53,7 +53,12 @@ public class RushHourGUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         gameOver = false;
+
+        // if you're going to test another file, DO NOT ADD "data/" IN FRONT OF IT. RushHour
+        // is made to automatically add that in front of the file name and it is not needed.
         rushHour = new RushHour("03_00.csv");
+
+
         vehicles = new HashMap<>();
         gp = new GridPane();
         rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
@@ -100,6 +105,7 @@ public class RushHourGUI extends Application {
         solve.setPrefHeight(30);
         solve.setFont(new Font("Arial", 20));
         solve.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        solve.setOnAction(new Solver(this));
 
         button = new Button("Reset Game");
         button.setAlignment(Pos.CENTER_RIGHT);
@@ -108,7 +114,7 @@ public class RushHourGUI extends Application {
         button.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         button.setOnAction(new GameReset(this));
 
-        bottom.getChildren().addAll(moves, button);
+        bottom.getChildren().addAll(moves, solve, button);
         bottom.setPrefHeight(30);
         bottom.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
         bottom.setPrefWidth(600);
@@ -150,6 +156,24 @@ public class RushHourGUI extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void solveHandle(int nummoves, RushHour rh){
+        Collection<Node> oldcars = new LinkedList<>();
+        for(char c: vehicles.keySet()){
+            oldcars.add(vehicles.get(c));
+        }
+        vehicles = new HashMap<>();
+        rushHour = rh;
+        gameOver = true;
+        cars = rushHour.getVehicles();
+        status.setText("Game solved in " + nummoves + " moves.");
+        hint.setText("Think you could solve it in less moves? Try it!");
+        moveMade();
+        moveCars(cars, oldcars);
+        rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
+    }
+
+    public RushHour getRH(){return this.rushHour;}
 
     public void hint(String thehint){
         if(!gameOver){

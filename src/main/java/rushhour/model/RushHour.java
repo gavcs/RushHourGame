@@ -341,13 +341,4 @@ public class RushHour {
             return false;
         }
     }
-
-    public static void main(String[] args){
-        try{
-            RushHour rh = new RushHour("03_00.csv");
-            
-        } catch(IOException e){
-            System.out.println("IOException");
-        }
-    }
 }

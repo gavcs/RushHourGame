@@ -34,7 +34,8 @@ public class RushHourConfig implements Configuration<RushHourConfig> {
         
     }
 
-    
+    public int numMoves(){return this.nummoves;}
+    public RushHour rh(){return this.rh;}
 
     @Override
     public Collection<RushHourConfig> getSuccessors() {
