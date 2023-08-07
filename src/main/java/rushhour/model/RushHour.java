@@ -9,10 +9,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import backtracker.Backtracker;
-import backtracker.Configuration;
 
-public class RushHour implements Configuration<RushHour> {
+public class RushHour {
     public static final int BOARD_DIM = 6;
     public static final char RED_SYMBOL = 'R';
     public static final char EMPTY_SYMBOL = '-';
@@ -326,46 +324,8 @@ public class RushHour implements Configuration<RushHour> {
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
-            Collection<Move> moves = rh.getPossibleMoves();
-            for(Move m: moves){
-                System.out.println(m.toString());
-            }
-            System.out.println(rh.getVehicle('R').getBack().getCol() + "\n\n" + rh.toString());
         } catch(IOException e){
             System.out.println("IOException");
         }
-    }
-
-    @Override
-    public Collection<RushHour> getSuccessors() {
-        Collection<RushHour> rh = new LinkedList<>();
-        Collection<Move> moves = this.getPossibleMoves();
-        for(Move m: moves){
-            RushHour other = new RushHour(this);
-            try {
-                other.moveVehicle(m);
-                rh.add(other);
-            } catch (RushHourException e) {
-                e.printStackTrace();
-            }
-        }
-        return rh;
-    }
-
-    @Override
-    public boolean isValid() {
-        return this.getPossibleMoves().size() != 0;
-    }
-
-    @Override
-    public boolean isGoal() {
-        return this.gameOver();
-    }
-
-    public void solve(){
-        System.out.println(this.toString());
-        Backtracker<RushHour> bt = new Backtracker<>(true);
-        bt.solve(this);
-        System.out.println(this.toString());
     }
 }
