@@ -12,49 +12,64 @@ import backtracker.Configuration;
 public class RushHourConfig implements Configuration<RushHourConfig> {
     private RushHour rh;
     private Set<String> pastboards;
-    private Collection<Move> moves;
 
     public RushHourConfig(RushHour rh){
         this.rh = rh;
         this.pastboards = new HashSet<>();
-
-        this.moves = new LinkedList<>();
     }
 
-    public RushHourConfig(RushHour rh, Set<String> pastboards, Collection<Move> moves){
-        this.rh = rh;
-        this.pastboards = pastboards;
-        this.moves = moves;
+    public RushHourConfig(RushHour rh, Set<String> pastboards){
+        try {
+            this.rh = new RushHour(rh);
+            this.pastboards = new HashSet<>(pastboards);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
+
+    public RushHour getRushHour(){return this.rh;}
 
     @Override
     public Collection<RushHourConfig> getSuccessors() {
+        pastboards.add(this.toString());
         Collection<RushHourConfig> rhc = new LinkedList<>();
-        Collection<Move> newmoves = this.rh.getPossibleMoves();
-        for(Move m: newmoves){
-            RushHour other = new RushHour(rh);
-            LinkedList<Move> omoves = new LinkedList<>(moves);
-            HashSet<String> oboards = new HashSet<>(pastboards);
-            try {
-                other.moveVehicle(m);
-                if(!pastboards.contains(other.toString())){
-                    omoves.add(m);
-                    oboards.add(other.toString());
-                    rhc.add(new RushHourConfig(other, oboards, omoves));
+        try {
+            RushHour temp = new RushHour(rh);
+            Collection<Move> newmoves = temp.getPossibleMoves();
+            for(Move m: newmoves){
+                System.out.println(m);
+                try {
+                    RushHour other = new RushHour(rh);
+                    try {
+                        other.moveVehicle(m);
+                        System.out.println(other);
+                        if(!other.equals(rh)){
+                            rhc.add(new RushHourConfig(other, pastboards));
+                            System.out.println("Added!");
+                        }
+                    } catch(RushHourException e){}
+                } catch (IOException e){
+                    e.printStackTrace();
                 }
-            } catch (RushHourException e) {
-                e.printStackTrace();
             }
-        }
+        } catch (IOException e){}
         return rhc;
     }
+
     @Override
     public boolean isValid() {
-        return true;
+        return !pastboards.contains(this.rh.toString());
     }
+
     @Override
     public boolean isGoal() {
         return rh.gameOver();
+    }
+
+    @Override
+    public String toString(){
+        return this.rh.toString();
     }
 
     public static void main(String[] args){
@@ -62,7 +77,8 @@ public class RushHourConfig implements Configuration<RushHourConfig> {
             RushHour rh = new RushHour("03_00.csv");
             RushHourConfig rhc = new RushHourConfig(rh);
             Backtracker<RushHourConfig> bt = new Backtracker<>(true);
-            bt.solve(rhc);
+            RushHourConfig solution = bt.solve(rhc);
+            System.out.println(solution);
         } catch (IOException e) {
             e.printStackTrace();
         }

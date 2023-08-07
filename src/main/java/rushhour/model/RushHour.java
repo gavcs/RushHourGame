@@ -17,6 +17,7 @@ public class RushHour {
     public static final Position EXIT_POS = new Position (2, 5);
     private int moveCount;
     private RushHourObserver observer;
+    private String filename;
     
     /*
      * creating a map with the vehicles will allow for the moveVehicle method to move the car
@@ -27,6 +28,7 @@ public class RushHour {
     private Map<Character, Vehicle> cars;
 
     public RushHour (String filename) throws IOException {
+        this.filename = filename;
         FileReader read = new FileReader("data/" + filename);
         BufferedReader reader = new BufferedReader(read);
         String[] numCars = filename.split("_");
@@ -50,11 +52,11 @@ public class RushHour {
         this.observer = null;
     }
 
-    public RushHour(RushHour other){
-        this.observer = other.getObserver();
-        this.moveCount = other.getMoveCount();
-        this.cars = other.getCars();
+    public RushHour(RushHour other) throws IOException{
+        this(other.filename);
     }
+
+    public String getFile(){return this.filename;}
 
     public Map<Character, Vehicle> getCars(){return this.cars;}
 
@@ -79,6 +81,8 @@ public class RushHour {
         if(safeMove(move)){
             //move it using Vehicle.move()
             carmove.move(move.getDirect());
+            cars.remove(key);
+            cars.put(key, carmove);
 
             //must add to the moveCount
             this.moveCount++;
@@ -321,9 +325,26 @@ public class RushHour {
         return vehicles;
     }
 
+    public boolean equals(RushHour other){
+        if(other instanceof RushHour){
+            RushHour o = (RushHour)other;
+            return this.getCars().equals(o.getCars());
+        } else {
+            return false;
+        }
+    }
+
     public static void main(String[] args){
         try{
             RushHour rh = new RushHour("03_00.csv");
+            RushHour other = new RushHour(rh);
+            try {
+                other.moveVehicle(new Move('O', Direction.DOWN));
+                System.out.println(other);
+                System.out.println(rh);
+            } catch (RushHourException e) {
+                e.printStackTrace();
+            }
         } catch(IOException e){
             System.out.println("IOException");
         }
