@@ -86,7 +86,7 @@ public class RushHour {
         char key = move.getSymbol();
         Vehicle carmove = cars.get(key);
 
-        if(safeMove(move)){
+        if(this.getPossibleMoves().contains(move)){
             //move it using Vehicle.move()
             carmove.move(move.getDirect());
             cars.remove(key);
@@ -96,12 +96,6 @@ public class RushHour {
             this.moveCount++;
         
             notifyObserver(carmove);
-        } else {
-            try {
-                throw new RushHourException("Invalid move");
-            } catch (RushHourException e) {
-                e.printStackTrace();
-            }
         }
     }
 

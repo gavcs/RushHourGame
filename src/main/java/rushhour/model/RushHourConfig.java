@@ -31,10 +31,10 @@ public class RushHourConfig implements Configuration<RushHourConfig> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
     }
 
     public int numMoves(){return this.nummoves;}
+    public Collection<Move> moves(){return this.moves;}
     public RushHour rh(){return this.rh;}
 
     @Override

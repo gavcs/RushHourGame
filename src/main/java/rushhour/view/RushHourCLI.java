@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Random;
 import java.util.Scanner;
-
+import backtracker.CopyBT;
 /* module imports */
 import rushhour.model.RushHour;
+import rushhour.model.RushHourConfig;
 import rushhour.model.RushHourException;
 import rushhour.model.Move;
 import rushhour.model.Direction;
@@ -15,8 +16,25 @@ import rushhour.model.Direction;
 public class RushHourCLI {
     /* used for hint */
     private static final Random Ran = new Random();
+    private static boolean solver = false;
+    
+    public static void solve(RushHour current) throws RushHourException{
+        RushHourConfig rhc = new RushHourConfig(current);
+        CopyBT<RushHourConfig> bt = new CopyBT<>(false);
+        RushHourConfig solution = bt.solve(rhc);
+        if(solution == null){
+            System.out.println("no solution found");
+        } else {
+            Collection<Move> moves = solution.moves();
+            for(Move move: moves){
+                System.out.println("\n> " + move.getSymbol() + " " + move.getDirect().toString());
+                current.moveVehicle(move);
+                System.out.println(current.toString() + "\n");
+            }
+        }
+    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RushHourException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter a Filename: ");
         String filename = scanner.nextLine();
@@ -49,6 +67,13 @@ public class RushHourCLI {
                         "'move' | vehicle(symbol) + direction(up, down, left, right) - Moves the vehicle with the corresponding symbol in the specified direction\n"+
                         "------------------");
                         break;
+
+                    // solves the board
+                    case "solve":
+                        solve(rushHour);
+                        forceQuit = true;
+                        solver = true;
+                    break;
 
                     /* hint command */
                     case "hint":
@@ -113,10 +138,12 @@ public class RushHourCLI {
                         }
                         break;
                 }
-                System.out.println(rushHour);
+                System.out.println("Final Board:\n" + rushHour);
 
-                if (rushHour.gameOver()) {
+                if (rushHour.gameOver() && !solver) {
                     System.out.println("You beat the level! It took "+rushHour.getMoveCount()+" moves!");
+                } else if(!solver){
+                    System.out.println("Solution not found.");
                 }
 
             }    
