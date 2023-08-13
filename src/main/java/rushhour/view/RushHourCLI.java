@@ -17,11 +17,15 @@ public class RushHourCLI {
     /* used for hint */
     private static final Random Ran = new Random();
     private static boolean solver = false;
-    
+
     public static void solve(RushHour current) throws RushHourException{
+        long start = System.currentTimeMillis();
         RushHourConfig rhc = new RushHourConfig(current);
+
+        // copied and pasted old backtracker to allow it to take in a time for it to automatically show no solution found if
+        // it takes longer than 30 seconds total.
         CopyBT<RushHourConfig> bt = new CopyBT<>(false);
-        RushHourConfig solution = bt.solve(rhc);
+        RushHourConfig solution = bt.solve(rhc, start);
         if(solution == null){
             System.out.println("no solution found");
         } else {
@@ -138,9 +142,10 @@ public class RushHourCLI {
                         }
                         break;
                 }
-                System.out.println("Final Board:\n" + rushHour);
+                
 
                 if (rushHour.gameOver() && !solver) {
+                    System.out.println("Final Board:\n" + rushHour);
                     System.out.println("You beat the level! It took "+rushHour.getMoveCount()+" moves!");
                 } else if(!solver){
                     System.out.println("Solution not found.");

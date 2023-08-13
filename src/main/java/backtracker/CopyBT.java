@@ -46,8 +46,7 @@ public class CopyBT<C extends Configuration<C>> {
      * @param config A valid configuration
      * @return A solution config, or null if no solution
      */
-    public C solve(C config) {
-        long start = System.currentTimeMillis();
+    public C solve(C config, long start) {
         debugPrint("Current config", config);
         if (config.isGoal()) {
             debugPrint("\tGoal config", config);
@@ -58,7 +57,7 @@ public class CopyBT<C extends Configuration<C>> {
                 if((int)(System.currentTimeMillis() - start)/1000 <= 30){
                     if (child.isValid()) {
                         debugPrint("\tValid successor", child);
-                        C sol = solve(child);
+                        C sol = solve(child, start);
                         if(sol != null) {
                             return sol;
                         }
