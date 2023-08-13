@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -27,8 +28,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import rushhour.model.Direction;
+import rushhour.model.Move;
 import rushhour.model.Position;
 import rushhour.model.RushHour;
+import rushhour.model.RushHourException;
 import rushhour.model.Vehicle;
 
 public class RushHourGUI extends Application {
@@ -157,26 +160,33 @@ public class RushHourGUI extends Application {
         stage.show();
     }
 
-    public void solveHandle(int nummoves, RushHour rh, boolean possible){
-        if(possible){
-            Collection<Node> oldcars = new LinkedList<>();
-            for(char c: vehicles.keySet()){
-                oldcars.add(vehicles.get(c));
+    public void solveHandleFalse(){
+        status.setText("Current configuration not solvable.");
+    }
+
+    public static boolean solved = false;
+
+    public void solveHandle(Collection<Move> moves){
+        new Thread(() -> {
+            for(Move m: moves){
+                Platform.runLater(() -> {
+                    try {
+                        rushHour.moveVehicle(m);
+                        status.setText(CarColor.colorToString(CarColor.getColor(m.getSymbol())) + " car moved " + m.getDirect().toString());
+                    } catch (RushHourException e) {
+                        e.printStackTrace();
+                    }
+                });
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            vehicles = new HashMap<>();
-            rushHour = rh;
-            gameOver = true;
-            cars = rushHour.getVehicles();
-            status.setText("Game solved in " + nummoves + " moves.");
-            hint.setText("Think you could solve it in less moves? Try it!");
-            moveMade();
-            moveCars(cars, oldcars);
-            rushHour.registerObserver(new CarMover(vehicles, gp, this, rushHour));
-        } else {
-            status.setText("Game is not possible to solve, tricked yah!");
-            hint.setText("Want to try another one?");
-            moves.setText("null");
-        }
+            Platform.runLater(()  -> {
+                this.setStatus("solved");
+            });
+        }).start();
     }
 
     public RushHour getRH(){return this.rushHour;}
@@ -266,6 +276,9 @@ public class RushHourGUI extends Application {
             status.setText("Cannot move car outside of bounds.");
         } else if(state.equals("crasherr")){
             status.setText("Cannot move car into another car");
+        } else if(state.equals("solved")){
+            status.setText("Game solved in " + rushHour.getMoveCount() + " moves.");
+            hint.setText("Think you could do it in less moves? Try it yourself.");
         }
     }
 

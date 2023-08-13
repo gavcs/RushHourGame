@@ -3,6 +3,7 @@ package rushhour.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import rushhour.model.RushHourConfig;
+import rushhour.model.RushHourException;
 
 public class Solver implements EventHandler<ActionEvent> {
     private RushHourGUI gui;
@@ -15,9 +16,9 @@ public class Solver implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         RushHourConfig solution = RushHourConfig.solve(gui.getRH());
         if(solution == null){
-            gui.solveHandle(0, null, false);
+            gui.solveHandleFalse();
         } else {
-            gui.solveHandle(solution.numMoves(), solution.rh(), true);
+            gui.solveHandle(solution.moves());
         }
     }
     
